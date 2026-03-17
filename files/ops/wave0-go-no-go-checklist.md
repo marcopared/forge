@@ -10,7 +10,8 @@ A GO is allowed only when every blocking criterion is satisfied and recorded in
 
 - Primary Launch Authority:
 - Acting Launch Authority:
-- Fallback authority activation rule:
+- Launch authority fallback rule:
+- Fallback authority activation trigger:
 - Runtime readiness signoff:
 - Validation / evidence readiness signoff:
 - Security / policy readiness signoff:
@@ -42,11 +43,12 @@ Record the approved version or hash for each live-launch artifact before GO.
 
 - [ ] Primary Launch Authority named
 - [ ] Acting Launch Authority named
-- [ ] Fallback authority rule understood and accepted
+- [ ] Launch authority fallback rule understood and accepted
 - [ ] Launch decision record opened before any live activation
+- [ ] Launch authority and fallback authority are both available for the launch window
 - [ ] Authority agrees that Wave 0 live is synthetic-only and not product-building work
 
-### Artifact integrity
+### Artifact integrity and immutability
 
 - [ ] Approved live artifact versions or hashes are recorded above
 - [ ] Artifact immutability since last verification is confirmed
@@ -54,32 +56,35 @@ Record the approved version or hash for each live-launch artifact before GO.
 - [ ] Rehearsal and live namespaces are cleanly separated
 - [ ] Live manifest is clearly distinct from `packets/waves/wave0-dry-run.yaml`
 
-### Live-only confirmations before GO
+### Live readiness
 
 - [ ] Live infrastructure health verified
-- [ ] CLI fallback operational
+- [ ] CLI fallback operational for launch, status, metrics, evidence inspection, pause or freeze, resume, and rollback
 - [ ] Live policy smoke passes
-- [ ] At least one escalation path rehearsed successfully
+- [ ] At least one escalation path was rehearsed successfully
 - [ ] Metrics visibility available
 - [ ] Evidence capture path verified in live mode
 - [ ] Launch-day rollback playbook present and reviewed
+- [ ] Escalation matrix reviewed with the operator on duty
 
 ### Packet and validation posture
 
 - [ ] `WAVE0-SYNTHETIC` is the only live packet in scope
 - [ ] Wave 0 live remains serial with `concurrency_cap: 1`
+- [ ] Launch mode remains operator-launched
 - [ ] Review mode is human-required
 - [ ] Speculative execution remains false
 - [ ] Manifest validation results were re-run after the last blocking artifact change
 - [ ] Validator, evidence, and review manifests are present, approved, and match the loaded references
+- [ ] Live smoke watchlist is reviewed and understood as the live success gate
 
 ### Readiness carry-forward
 
 - [ ] Latest successful rehearsal evidence reviewed
 - [ ] Rehearsal notes reviewed
-- [ ] Wave 0 live smoke watchlist reviewed
 - [ ] No unresolved Phase 7 blocking readiness gap remains
 - [ ] Operator can explain pause, freeze, abort, and rollback actions without improvisation
+- [ ] Operator can distinguish rehearsal evidence from live evidence during closeout
 
 ## Advisory Criteria
 

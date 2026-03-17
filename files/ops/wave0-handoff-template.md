@@ -12,8 +12,8 @@
 
 ## Current Packet State
 
-- Wave:
-- Packet ID:
+- Wave: `wave-0-live`
+- Packet ID: `WAVE0-SYNTHETIC`
 - Current lifecycle state:
 - Last confirmed legal state transition:
 - Merge-back status:

@@ -49,9 +49,13 @@ A GO is allowed only when every blocking criterion is satisfied. Advisory criter
 - [ ] `packets/waves/wave1-m0a-contracts.yaml` exists, is approved, and remains serial, operator-launched, and non-speculative
 - [ ] Freeze, rollback, and expansion criteria are present and understood
 
-### Operator runbooks
+### Operator runbooks and live launch artifacts
 
-- [ ] `ops/runbooks/wave0-smoke.md` has been used during rehearsal and remains usable as the Wave 0 operational reference
+- [ ] `ops/runbooks/wave0-smoke.md` has been used during rehearsal and remains the rehearsal reference only
+- [ ] `ops/wave0-go-no-go-checklist.md` exists for the live launch decision
+- [ ] `ops/wave0-launch-protocol.md` exists for the live execution procedure
+- [ ] `ops/wave0-escalation-matrix.md` exists for Wave 0 live escalation handling
+- [ ] `ops/wave0-rollback-playbook.md` exists for live pause, freeze, abort, and rollback handling
 - [ ] `ops/runbooks/wave1-launch.md` is present for the immediate post-Wave 0 path
 - [ ] `ops/runbooks/validator-failure.md` is present for controlled failure handling
 - [ ] `ops/runbooks/cli-fallback.md` is present and matches the available CLI behavior
@@ -66,6 +70,7 @@ A GO is allowed only when every blocking criterion is satisfied. Advisory criter
 
 - [ ] `benchmarks/fixtures/wave0-synthetic/` is present and matches the expected rehearsal fixture
 - [ ] `benchmarks/manifests/wave0-smoke.yaml` is present and the expected outcomes were used during rehearsal review
+- [ ] `benchmarks/manifests/wave0-live-smoke.yaml` is present as the distinct live watchlist for Phase 8
 
 ### Synthetic dry-run rehearsal results
 
@@ -90,7 +95,7 @@ A GO is allowed only when every blocking criterion is satisfied. Advisory criter
 
 ### Escalation coverage
 
-- [ ] Escalation paths for protected-path writes, validator failure, and operator pause/freeze decisions are documented
+- [ ] Escalation paths for protected-path writes, validator failure, and operator pause or freeze decisions are documented
 - [ ] At least one escalation path was rehearsed successfully end-to-end
 - [ ] The operator can identify who decides approve, deny, re-scope, pause, or return-to-preparation actions
 
@@ -127,6 +132,7 @@ Any of the following changes after the last completed readiness verification req
 - `packets/waves/wave0-dry-run.yaml`
 - `packets/waves/wave0-live.yaml`
 - `packets/waves/wave1-m0a-contracts.yaml`
+- `benchmarks/manifests/wave0-live-smoke.yaml`
 - Manifest validation tooling rules
 
 Apply the stricter interpretation when in doubt: if a change can alter packet behavior, validation outcomes, policy decisions, or wave control, readiness is invalidated.

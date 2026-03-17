@@ -24,7 +24,7 @@ launch. These metrics govern continuation, pause, abort, and closeout decisions.
 | Security alerts | Security or policy-sensitive anomaly count | 0 tolerated in success path | Freeze, abort |
 | Metrics anomalies | Missing, contradictory, or delayed live metrics | 0 blocking anomalies in success path | Pause, post-run review |
 
-## Continuation Gates
+## Continuation Thresholds
 
 Wave 0 may continue while in flight only if all are true:
 
@@ -37,7 +37,7 @@ Wave 0 may continue while in flight only if all are true:
 - Packet state transitions remain legal and ordered
 - Benchmark smoke visibility remains available
 
-## Pause Gates
+## Pause Thresholds
 
 Pause or freeze immediately if any of the following occurs:
 
@@ -51,7 +51,7 @@ Pause or freeze immediately if any of the following occurs:
 - Benchmark smoke visibility is lost
 - Metrics become contradictory or materially stale
 
-## Abort Gates
+## Abort Thresholds
 
 Abort the packet or wave if any of the following occurs:
 
@@ -69,6 +69,7 @@ Abort the packet or wave if any of the following occurs:
 The closeout decision must explicitly review:
 
 - Evidence completeness result
+- Validator success result
 - Policy decision pattern
 - Runtime health incidents
 - Operator intervention burden

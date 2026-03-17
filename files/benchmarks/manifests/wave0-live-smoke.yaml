@@ -18,6 +18,7 @@ scope_exercised:
   - merge-back correctness for the approved synthetic diff
   - audit trail completeness for all live actions and decisions
   - speculative marker enforcement at false throughout execution
+  - operator interpretation of failure under live authority control
 
 explicitly_not_exercised:
   - rehearsal readiness or operator training
@@ -51,6 +52,9 @@ expected_outcomes:
   speculative_start_marker:
     status: pass
     expectation: "false"
+  operator_failure_interpretation:
+    status: pass
+    expectation: "Any watchlist failure is classified as pause, freeze, abort, or rollback per live launch control rules rather than treated as rehearsal noise"
   cost_summary:
     status: record
     expectation: "Token count, duration, and model used are recorded"
@@ -63,9 +67,10 @@ expected_outcomes:
 
 failure_interpretation:
   blocking_conditions:
-    - "Any FAIL outcome in packet completion, validator pass set, evidence completeness, policy behavior, merge-back correctness, audit trail completeness, or speculative marker enforcement"
+    - "Any FAIL outcome in packet completion, validator pass set, evidence completeness, policy behavior, merge-back correctness, audit trail completeness, speculative marker enforcement, or operator failure interpretation"
     - "Any missing cost, context-pack, or worktree metadata required for live closeout"
     - "Any live evidence that cannot be cleanly distinguished from rehearsal evidence"
   operator_policy:
-    - "Treat any live smoke failure as a freeze-and-investigate event, not a rehearsal-style retry"
+    - "Treat any live smoke failure as a live control event requiring pause, freeze, abort, or rollback handling"
+    - "Do not reinterpret live smoke failure as a rehearsal-style retry or soft advisory"
     - "Do not progress to Wave 1 planning until the live smoke watchlist passes and the decision record is closed"

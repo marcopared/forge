@@ -2,10 +2,12 @@
 
 ## Pre-Launch Checks
 
-- [ ] Wave 0 completed successfully (all success criteria met)
-- [ ] Wave 0 post-launch review documented in the closed `ops/wave0-decision-record.md`
-- [ ] If Wave 0 marked `Postmortem required: yes`, the postmortem is completed before Wave 1 launch
+- [ ] Wave 0 completed successfully across packet, wave, launch-process, and platform-trust success levels
+- [ ] Wave 0 post-launch review is documented in the closed `ops/wave0-decision-record.md`
+- [ ] Wave 0 final disposition is `Advance to Wave 1 planning`
 - [ ] `Wave 1 planning permitted: yes` is recorded in the closed Wave 0 decision record
+- [ ] If Wave 0 marked `Postmortem required: yes`, the postmortem is completed before Wave 1 launch
+- [ ] No unresolved Wave 0 escalation, security alert, evidence-integrity doubt, policy-trust doubt, or audit-continuity doubt remains
 - [ ] Token budgets reviewed against Wave 0 data
 - [ ] Wave 1 manifest committed and validated
 - [ ] All five packet manifests committed and pass validation
@@ -61,10 +63,8 @@
 
 ## Escalation Checks
 
-- [ ] Were any escalations triggered? If yes:
-  - [ ] Each escalation classified and resolved
-  - [ ] Resolution documented in launch record
-  - [ ] No escalation indicates a systemic issue requiring wave pause
+- [ ] Were any escalations triggered? If yes, each escalation is classified, resolved, and documented in the launch record.
+- [ ] No escalation indicates a systemic issue requiring wave pause.
 
 ## Evidence Checks
 
@@ -82,7 +82,7 @@
 
 ## Documentation and Harness Freshness
 
-- [ ] Packet registry updated (all five packets marked "merged" or "completed" consistently)
+- [ ] Packet registry updated (all five packets marked `merged` or `completed` consistently)
 - [ ] Token budgets still appropriate based on observed consumption
 - [ ] Policy files unchanged during Wave 1 execution
 - [ ] Validator manifests unchanged during Wave 1 execution
@@ -93,9 +93,9 @@ All of the following must be true to authorize post-Wave-1 planning:
 
 - [ ] All wave-completion checks above are true
 - [ ] Operator writes a Wave 1 completion assessment answering:
-  - Are the M0a contracts stable enough that M0b and first M1 packets can safely depend on them?
-  - Were there any type shape issues that might require revision when real implementation starts?
-  - Did the agent produce types that faithfully represent the approved architecture, or did the human reviewer have to make significant corrections?
-  - Is the pipeline reliable enough for increased concurrency?
-  - Are the evidence and validator signals trustworthy?
+- [ ] Are the M0a contracts stable enough that M0b and first M1 packets can safely depend on them?
+- [ ] Were there any type shape issues that might require revision when real implementation starts?
+- [ ] Did the agent produce types that faithfully represent the approved architecture, or did the human reviewer have to make significant corrections?
+- [ ] Is the pipeline reliable enough for increased concurrency?
+- [ ] Are the evidence and validator signals trustworthy?
 - [ ] Operator explicitly records: AUTHORIZE POST-WAVE-1 PLANNING / REPEAT WAVE 1 / RETURN TO PREPARATION

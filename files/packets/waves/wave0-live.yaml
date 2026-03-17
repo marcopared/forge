@@ -5,16 +5,18 @@ status: ready # ready | active | completed | paused | frozen | aborted
 purpose: |
   Execute the first live Forge wave under operator control using one synthetic,
   low-risk packet only. Wave 0 live exists to produce authoritative operational
-  evidence for the real control path: launch governance, policy enforcement,
-  validator execution, evidence capture, audit logging, and merge-back.
+  evidence for launch governance, policy enforcement, validator execution,
+  evidence capture, audit logging, and merge-back.
 
-  It does not authorize product-building work, real M0a contract authoring, or
-  any expansion beyond synthetic-only operational proof.
+  This manifest is live-only. It must not be used for rehearsal and it does not
+  authorize product-building work, real M0a contract authoring, or any scope
+  beyond synthetic operational proof.
 
 packets:
   - WAVE0-SYNTHETIC
 
 excluded_packets:
+  - "All rehearsal-only executions governed by wave0-dry-run.yaml"
   - "All real M0a contract packets"
   - "All M0b scaffolding packets"
   - "All M1+ implementation packets"
@@ -49,29 +51,45 @@ review_policy:
 
 benchmark_gates:
   pre_wave:
-    - live-policy-smoke-pass
     - live-infra-health-verified
+    - cli-fallback-operational
+    - live-policy-smoke-pass
+    - metrics-visibility-available
+    - rehearsal-and-live-namespaces-separated
   post_wave:
     - wave0-live-smoke-pass
+    - full-live-evidence-inspection-complete
+    - wave0-closeout-recorded
 
 launch_gates:
   go_requirements:
     - primary-launch-authority-named
     - acting-launch-authority-named
+    - launch-decision-record-opened
     - artifact-hashes-match-approved-versions
-    - live-infrastructure-health-verified
-    - cli-fallback-operational
-    - live-policy-smoke-pass
-    - escalation-path-rehearsed
-    - metrics-visibility-available
-    - rehearsal-and-live-namespaces-separated
+    - no-invalidating-artifact-drift
+    - latest-successful-rehearsal-evidence-reviewed
+    - escalation-rehearsal-reviewed
   continuation_requirements:
     - packet-state-transitions-legal
+    - validator-state-explainable
     - no-policy-anomaly
     - no-security-alert
     - evidence-path-intact
+    - audit-trail-continuous
     - speculative-marker-false
     - token-usage-below-hard-ceiling
+    - live-smoke-visibility-maintained
+
+pause_gates:
+  validator_error: true
+  evidence_completeness_failure: true
+  unexpected_policy_deny_or_escalate: true
+  runtime_reprovisioning_required: true
+  benchmark_smoke_visibility_lost: true
+  operator_cannot_explain_current_state: true
+  decision_latency_exceeds_five_minutes: true
+  escalation_clearance_exceeds_fifteen_minutes: true
 
 freeze_gates:
   policy_engine_anomaly: true
@@ -81,6 +99,7 @@ freeze_gates:
   operator_loss_of_visibility: true
   authority_handoff_required: true
   graph_inconsistency: true
+  any_speculative_artifact: true
 
 abort_gates:
   manifest_mismatch_at_runtime: true
@@ -90,10 +109,12 @@ abort_gates:
   unrecoverable_evidence_corruption: true
   repeated_unsafe_policy_interaction: true
   worktree_corruption_requiring_fresh_start: true
+  second_major_repair_need_on_synthetic_packet: true
 
 rollback_gates:
   synthetic_merge_untrustworthy: true
   merged_state_requires_revert: true
+  post_merge_integrity_failure: true
   rollback_after_merge_is_operator_authorized_only: true
 
 success_metrics:
@@ -103,6 +124,7 @@ success_metrics:
   target_security_alerts: 0
   target_speculative_markers: 0
   target_operator_interventions: low-and-explainable
+  target_audit_gaps: 0
 
 progression_constraints:
   wave1_planning_permitted_only_if: |
@@ -110,18 +132,16 @@ progression_constraints:
     success are all true and the Wave 0 decision record is closed with an
     explicit allowance for Wave 1 planning.
   repeat_or_return_policy: |
-    Any repair loop beyond one narrowly scoped packet-local correction, any
-    unresolved escalation, any rollback, or any governance ambiguity requires
-    either repeat-Wave-0 or return-to-preparation disposition.
+    Any unresolved escalation, any rollback, any governance ambiguity, any
+    untrustworthy merge-back, or any repair burden beyond one narrowly scoped
+    packet-local correction requires either repeat-Wave-0 or return-to-preparation.
 
 operator_notes: |
-  Keep Wave 0 live distinct from wave0-dry-run.yaml. This manifest governs real
-  launch authorization, immutability during execution, live-only monitoring,
-  authority substitution, freeze/abort/rollback handling, and post-run closeout.
+  Keep Wave 0 live distinct from packets/waves/wave0-dry-run.yaml. This manifest
+  governs live launch authorization, immutability during execution, live-only
+  monitoring, authority substitution, pause or freeze or abort or rollback
+  handling, and post-run closeout.
 
-  The post-wave gate `wave0-live-smoke-pass` is satisfied only by
-  `benchmarks/manifests/wave0-live-smoke.yaml`, not the rehearsal artifact
-  `benchmarks/manifests/wave0-smoke.yaml`.
-
-  Wave 0 live is synthetic-only operational proof. It is not the start of real
-  product-building work.
+  The post-wave gate wave0-live-smoke-pass is satisfied only by
+  benchmarks/manifests/wave0-live-smoke.yaml, not by the rehearsal artifact
+  benchmarks/manifests/wave0-smoke.yaml.

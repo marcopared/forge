@@ -37,6 +37,7 @@ when merge-back or resulting state cannot be trusted.
 - Temporary evidence collection anomaly
 - Operator needs inspection before the next state transition
 - CLI fallback degraded but recoverable quickly
+- Benchmark smoke visibility lost
 
 ### Freeze triggers
 
@@ -47,6 +48,7 @@ when merge-back or resulting state cannot be trusted.
 - Operator loss of situational awareness
 - Authority handoff required
 - Graph inconsistency discovered in live Wave 0
+- Any speculative artifact or speculative marker not equal to `false`
 
 ### Abort triggers
 
@@ -75,7 +77,7 @@ Apply only if merge-back already occurred.
 3. Preserve and archive the live evidence bundle, audit trail, metrics snapshot, and intervention log.
 4. Revert the synthetic merge from the phase branch using the approved operator path.
 5. Verify the revert restores the pre-launch trusted baseline.
-6. Quarantine or remove the live synthetic worktree or branch from active use.
+6. Quarantine the live synthetic worktree or branch from active use.
 7. Record exact revert reason, affected artifacts, and resulting branch state.
 8. Mark Wave 0 unsuccessful and move to disposition.
 
@@ -121,3 +123,4 @@ Resume after pause only if:
 - No widening of scope to rescue the synthetic packet.
 - No blending of rehearsal evidence into rollback justification.
 - If rollback occurs, Wave 0 does not count as successful.
+- Repeat-Wave-0 and return-to-preparation are distinct dispositions and must not be conflated.

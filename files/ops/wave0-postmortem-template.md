@@ -83,6 +83,13 @@ Mark all that apply.
 - What was confusing:
 - What should change before another live attempt:
 
+## Required Follow-Up
+
+- Follow-up item 1:
+- Follow-up owner:
+- Follow-up due or trigger:
+- Evidence required before closure:
+
 ## Disposition Recommendation
 
 Choose one and justify it.

@@ -7,8 +7,9 @@
 - Decision time:
 - Environment:
 - Launch window ID:
-- Wave:
-- Packet:
+- Commit SHA:
+- Wave: `wave-0-live`
+- Packet: `WAVE0-SYNTHETIC`
 
 ## Named Authorities
 
@@ -98,11 +99,11 @@ Record each lens separately even if one person signs all of them.
 - Closeout date:
 - Closeout time:
 
-## Wave 1 Planning Permission
+## Wave 1 Authorization Boundary
 
 - Wave 1 planning permitted: `yes` / `no`
 - If `no`, blocking reason:
-- If `yes`, rationale tied to Wave 0 success levels:
+- If `yes`, rationale tied to packet, wave, launch-process, and platform-trust success:
 
 ## Notes
 
