@@ -1,0 +1,42 @@
+spec_kind: scope-checker
+spec_name: scope-and-target-paths
+version: 1
+status: ready
+summary: >-
+  Scope validation rules enforcing the relationship between scope,
+  out_of_scope, target_paths, and protected_paths.
+
+rules:
+  - id: scope_out_of_scope_no_overlap
+    blocking: true
+    when: creation_and_pre_activation
+    check: no path may appear in both scope and out_of_scope
+  - id: target_paths_subset_of_scope
+    blocking: true
+    when: creation_and_pre_activation
+    check: every target path must fall within scope
+  - id: protected_paths_never_writable
+    blocking: true
+    when: activation_and_runtime
+    check: protected paths override scope and target paths
+  - id: exact_path_classes_block_outside_targets
+    blocking: true
+    when: runtime_validation
+    check: foundation, interface, documentation, and policy-sensitive packets must not write outside exact target paths
+  - id: pattern_classes_warn_outside_targets
+    blocking: false
+    when: runtime_validation
+    check: implementation, integration, and graph-repair packets may warn on writes inside scope but outside target paths
+  - id: protected_paths_declared
+    blocking: false
+    when: creation
+    check: protected_paths should not be empty
+
+class_target_path_modes:
+  foundation: exact
+  interface: exact
+  implementation: exact_or_single_directory_pattern
+  integration: pattern_within_scope
+  documentation: exact
+  policy-sensitive: exact
+  graph-repair: inherited_plus_pattern_for_new_files

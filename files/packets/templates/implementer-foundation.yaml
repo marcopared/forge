@@ -1,0 +1,68 @@
+template_kind: prompt-template
+template_name: implementer-foundation
+version: 1
+status: calibrated-for-wave-0
+role: implementer
+applies_to_packet_classes:
+  - foundation
+summary: >-
+  Foundation implementer template family used by Wave 0 synthetic execution and
+  Wave 1 M0a contract packets. Calibration of this template is blocking for
+  Wave 0 readiness.
+
+layers:
+  role_instructions:
+    objective: Produce the packet outputs required by the manifest without expanding scope.
+    must_do:
+      - follow the packet completion contract exactly
+      - create or modify only files allowed by scope and target paths
+      - keep outputs machine-readable and repo-native
+    must_not_do:
+      - invent architecture beyond approved docs
+      - touch protected paths or harness policy files
+      - add dependencies without escalation
+  packet_contract:
+    source: packet manifest
+    includes:
+      - objective
+      - scope
+      - out_of_scope
+      - target_paths
+      - expected_outputs
+      - completion_contract
+  subsystem_constraints:
+    source: approved architecture docs and subsystem specs
+  policy_boundaries:
+    source: harness policies and packet protected paths
+  validator_expectations:
+    source: validator manifest
+    includes:
+      - compilation
+      - lint
+      - architecture_check
+      - scope_drift
+      - evidence_completeness
+  evidence_requirements:
+    source: evidence manifest
+  output_structure:
+    required_sections:
+      - files_created_or_modified
+      - completion_contract_check
+      - validator_risk_notes
+  retry_context:
+    source: prior diff and failure report
+    included_when: repair_attempt
+  trust_labels:
+    required:
+      - SYSTEM
+      - HARNESS
+      - CODE
+      - EXTERNAL
+
+calibration_policy:
+  blocking_for_readiness: true
+  convergence_rule: 3 consecutive acceptable synthetic runs
+
+notes:
+  - Trust-label separation is invariant and must not be calibrated away.
+  - Scope declarations and output structure requirements are always present.

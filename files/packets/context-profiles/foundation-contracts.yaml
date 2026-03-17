@@ -1,0 +1,69 @@
+profile_id: foundation-contracts
+title: "Context profile for M0a foundation contract packets"
+description: |
+  Assembles context for agents producing TypeScript type definitions
+  from the approved architecture design. Keeps context small and focused
+  on specification documents, not implementation code.
+
+included:
+  architecture_docs:
+    # The exact repo paths for architecture docs depend on the repo
+    # skeleton structure available before Wave 1 launch. The context packager
+    # should include whichever architecture docs exist that cover:
+    - description: "Subsystem breakdown and domain model"
+      trust_label: HARNESS
+    - description: "Task state machine definition"
+      trust_label: HARNESS
+    - description: "Evidence model and retention tiers"
+      trust_label: HARNESS
+    - description: "Security model — action classes, policy model"
+      trust_label: HARNESS
+
+  policy_docs:
+    - path: "harness/policies/blessed-stack.yaml"
+      trust_label: HARNESS
+    - path: "AGENTS.md"
+      sections: "coding conventions, type definition rules"
+      trust_label: HARNESS
+
+  validation_docs:
+    - path: "packets/validator-manifests/foundation.yaml"
+      trust_label: SYSTEM
+    - path: "packets/evidence-manifests/standard.yaml"
+      trust_label: SYSTEM
+
+  repo_files:
+    - path: "packages/shared/tsconfig.json"
+      trust_label: CODE
+    - path: "packages/shared/src/types/**"
+      description: "Existing type files (from prior packets in the wave)"
+      trust_label: CODE
+
+excluded:
+  - "apps/**"
+  - "prisma/**"
+  - "benchmarks/**"
+  - "ops/**"
+  - "All implementation source code"
+  - "All test code"
+  - "External research or web content"
+
+trust_labels:
+  SYSTEM: "Orchestrator instructions, packet contract, role constraints, tool permissions"
+  HARNESS: "Architecture docs, coding conventions, policy docs from repo"
+  CODE: "Source files within scope"
+  EXTERNAL: "Not used for foundation contracts"
+
+size_target: "< 30% of model context window"
+size_rationale: |
+  Foundation contracts need specification documents and existing type
+  files, not implementation code. Context should be small enough that
+  the agent focuses on translating specs into types, not navigating
+  a large codebase.
+
+retry_time_additions:
+  - "Prior diff (the attempt that failed)"
+  - "Failure report (structured validator output)"
+  - "Repair attempt number"
+  - "If attempt > 1: prior repair diffs"
+  - "On retry, reduce general context to stay within token budget — agent should focus on the failure"

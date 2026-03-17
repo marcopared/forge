@@ -1,0 +1,75 @@
+spec_kind: packet-linter-rules
+spec_name: manifest-linter
+version: 1
+status: ready
+summary: >-
+  Per-field and cross-field manifest linter rules derived from the Phase 7
+  validation checklist. Blocking rules reject malformed manifests before
+  activation.
+
+rules:
+  - id: schema_completeness
+    category: completeness
+    blocking: true
+    when: creation_and_pre_activation
+    check: all required fields present and non-empty
+  - id: no_placeholder_values
+    category: completeness
+    blocking: true
+    when: creation_and_pre_activation
+    check: required fields must not contain TBD, TODO, unknown, or empty sentinel values
+  - id: field_type_correctness
+    category: typing
+    blocking: true
+    when: creation
+    check: fields match schema-spec types
+  - id: enum_membership
+    category: typing
+    blocking: true
+    when: creation
+    check: enum fields use allowed values from schema-spec
+  - id: scope_out_of_scope_disjoint
+    category: cross_field
+    blocking: true
+    when: creation_and_pre_activation
+    check: scope and out_of_scope do not overlap
+  - id: target_paths_within_scope
+    category: cross_field
+    blocking: true
+    when: creation_and_pre_activation
+    check: each target path is a subset of declared scope
+  - id: protected_paths_declared
+    category: scope_policy
+    blocking: false
+    when: creation
+    check: protected_paths is non-empty
+  - id: target_path_mode_matches_class
+    category: scope_policy
+    blocking: true
+    when: creation
+    check: target path format matches packet class rules
+  - id: speculative_start_matches_class
+    category: dependency_policy
+    blocking: true
+    when: creation_and_pre_activation
+    check: speculative_start_allowed is legal for the packet class and dependency profile
+  - id: policy_sensitivity_consistency
+    category: policy
+    blocking: false
+    when: creation
+    check: policy_sensitivities align with packet class expectations
+  - id: graph_repair_hooks_present
+    category: operational
+    blocking: false
+    when: creation
+    check: graph_repair_hooks are plausible and non-empty for classes likely to need repair guidance
+  - id: token_budget_defined
+    category: operational
+    blocking: true
+    when: pre_activation
+    check: packet class has a defined token budget in harness/policies/token-budgets.yaml
+  - id: benchmark_tags_valid
+    category: operational
+    blocking: false
+    when: creation
+    check: benchmark tags reference known benchmark manifests when present

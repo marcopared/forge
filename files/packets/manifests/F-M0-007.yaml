@@ -1,0 +1,81 @@
+packet_id: F-M0-007
+title: "Evidence schema + retention tier model"
+version: 1
+
+# Classification
+milestone: M0a
+workstream: WS-1
+packet_class: foundation
+risk_class: medium
+activation_class: operator-launched
+
+# Dependencies
+dependency_class_profile: interface
+prerequisite_packets:
+  - F-M0-003 # Domain types must be merged
+prerequisite_artifacts:
+  - path: "packages/shared/src/types/domain.ts"
+    description: "Domain types must exist"
+  - path: "packages/shared/tsconfig.json"
+    description: "TypeScript config must exist"
+speculative_start_allowed: false
+
+# Scope
+scope:
+  - "packages/shared/src/types/"
+out_of_scope:
+  - "apps/"
+  - "harness/"
+  - "prisma/"
+  - "packages/shared/src/utils/"
+protected_paths:
+  - "harness/"
+  - ".github/"
+  - "AGENTS.md"
+  - ".env"
+target_paths:
+  - "packages/shared/src/types/evidence.ts"
+  - "packages/shared/src/types/index.ts"
+
+# Inputs and Outputs
+required_inputs:
+  - "Approved evaluation design — evidence requirements and completeness model"
+  - "Approved architecture design — evidence collector, bundle assembly, retention tiers"
+  - "Approved architecture design — evidence tier clarifications (pre/post merge)"
+  - "Evidence manifest design from the instantiation layer"
+  - "Domain types from F-M0-003"
+expected_outputs:
+  - "TypeScript evidence type definitions (bundle, item, tier, confidence)"
+  - "Updated re-export index"
+required_docs_updates: []
+
+# Validation / Evidence / Review
+validator_manifest_ref: "packets/validator-manifests/foundation.yaml"
+evidence_manifest_ref: "packets/evidence-manifests/standard.yaml"
+review_manifest_ref: "packets/review-manifests/human-required.yaml"
+prompt_template_ref: "packets/templates/implementer-foundation.yaml"
+context_pack_profile: "foundation-contracts"
+
+# Operational
+benchmark_tags: []
+policy_sensitivities: []
+escalation_conditions:
+  - "Evidence schema incompatible with the approved evaluation design or evidence manifest"
+  - "Output size triggers packet sizing concerns per the structural sizing rules"
+  - "Retention tier model doesn't match the approved architecture tier design"
+completion_contract:
+  - "All evidence types compile under strict mode"
+  - "Evidence bundle, evidence item, retention tier, and confidence score types defined"
+  - "Tier model matches the approved architecture design"
+  - "Evidence types reference domain types from F-M0-003"
+  - "No implementation logic"
+  - "Re-export index updated"
+  - "Lint passes"
+graph_repair_hooks:
+  - "If validator runner or evidence pipeline packets fail against these types, this packet may need revision"
+operator_notes: |
+  Evidence schema defines the evidence bundle structure used by the
+  validator runner, evidence pipeline, and UI inspector. Retention tiers
+  must match the approved architecture design. Verify against the
+  standard evidence manifest: do the types here support every required,
+  conditional, and ephemeral evidence item listed?

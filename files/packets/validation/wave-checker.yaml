@@ -1,0 +1,53 @@
+spec_kind: wave-checker
+spec_name: wave-membership-and-policy
+version: 2
+status: ready
+summary: >-
+  Validation rules for packet membership in wave manifests and for wave-level
+  execution policy consistency.
+
+rules:
+  - id: packet_listed_only_in_declared_registry_waves
+    blocking: false
+    when: continuous
+    check: each instantiated packet is listed only in wave manifests declared by its registry wave_id or wave_memberships entry
+  - id: multi_wave_membership_requires_explicit_registry_declaration
+    blocking: true
+    when: wave_validation
+    check: a packet may appear in more than one wave manifest only when the registry explicitly declares each allowed wave membership for that same packet id
+  - id: wave_packet_exists_in_registry
+    blocking: true
+    when: wave_validation
+    check: every packet listed in a wave exists in the registry
+  - id: wave_policy_matches_packet_constraints
+    blocking: true
+    when: pre_activation
+    check: wave speculative execution, concurrency, and review policy do not contradict packet manifests
+  - id: expansion_criteria_defined
+    blocking: true
+    when: wave_validation
+    check: wave manifest declares explicit expansion criteria
+  - id: benchmark_gates_defined
+    blocking: false
+    when: wave_validation
+    check: pre-wave and post-wave benchmark gates are explicit
+
+wave0_policy_defaults:
+  packets:
+    - WAVE0-SYNTHETIC
+  concurrency_cap: 1
+  launch_mode: operator-launched
+  review_mode: human-required
+  speculative_execution: false
+
+wave1_policy_defaults:
+  packets:
+    - F-M0-003
+    - F-M0-004
+    - F-M0-005
+    - F-M0-006
+    - F-M0-007
+  concurrency_cap: 1
+  launch_mode: operator-launched
+  review_mode: human-required
+  speculative_execution: false

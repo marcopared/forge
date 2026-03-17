@@ -1,0 +1,36 @@
+spec_kind: reference-integrity-checker
+spec_name: packet-references
+version: 1
+status: ready
+summary: >-
+  Reference integrity rules for manifest-attached artifacts. Missing references
+  are blocking because packets cannot execute or validate correctly without
+  these shared documents.
+
+rules:
+  - id: validator_manifest_exists
+    blocking: true
+    reference_field: validator_manifest_ref
+  - id: evidence_manifest_exists
+    blocking: true
+    reference_field: evidence_manifest_ref
+  - id: review_manifest_exists
+    blocking: true
+    reference_field: review_manifest_ref
+  - id: context_pack_profile_exists
+    blocking: true
+    reference_field: context_pack_profile
+  - id: prompt_template_exists
+    blocking: true
+    reference_field: prompt_template_ref
+  - id: benchmark_refs_exist
+    blocking: false
+    reference_field: benchmark_tags
+
+path_resolution_policy:
+  packet_manifest_refs_are_repo_relative: true
+  context_pack_profiles_directory: packets/context-profiles/
+  prompt_templates_directory: packets/templates/
+  validator_manifests_directory: packets/validator-manifests/
+  evidence_manifests_directory: packets/evidence-manifests/
+  review_manifests_directory: packets/review-manifests/

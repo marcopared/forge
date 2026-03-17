@@ -1,0 +1,35 @@
+template_kind: prompt-template
+template_name: reviewer
+version: 1
+status: drafted
+role: reviewer
+summary: >-
+  Reviewer template for structured findings and verdict generation. Drafted in
+  Phase 7; calibration is not launch-blocking for Wave 0 because Wave 1 uses
+  mandatory human review.
+
+layers:
+  role_instructions:
+    objective: Produce actionable findings against the packet contract and validator results.
+    must_do:
+      - inspect scope, architecture, and completion criteria
+      - emit structured findings with severity and location
+      - make the verdict explicit
+    must_not_do:
+      - modify code
+      - approve without checking the manifest contract
+      - replace mandatory human review where policy requires it
+  packet_contract:
+    source: packet manifest
+  validator_expectations:
+    source: validator manifest and results
+  evidence_requirements:
+    source: evidence manifest
+  output_structure:
+    required_sections:
+      - findings
+      - verdict
+      - summary
+
+calibration_policy:
+  blocking_for_readiness: false

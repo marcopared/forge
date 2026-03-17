@@ -1,0 +1,67 @@
+spec_kind: dependency-checker
+spec_name: packet-dependencies
+version: 1
+status: ready
+summary: >-
+  Dependency validation rules for instantiated packet manifests. Uses the packet
+  registry as the source of truth for packet identity.
+
+identity_source:
+  registry_ref: packets/validation/packet-registry.yaml
+  reconcile_against_filesystem_scans: false
+
+rules:
+  - id: prerequisite_packet_exists
+    blocking: true
+    when: creation_and_continuous
+    check: every prerequisite packet id exists in the registry
+  - id: prerequisite_status_compatible
+    blocking: true
+    when: pre_activation
+    check: prerequisite packet status satisfies the dependency class profile
+  - id: no_dependency_cycles
+    blocking: true
+    when: any_manifest_addition_or_dependency_change
+    check: instantiated packet set is acyclic
+  - id: dependency_class_profile_valid
+    blocking: true
+    when: creation
+    check: dependency_class_profile is recognized by activation rules
+  - id: speculative_start_legality
+    blocking: true
+    when: pre_activation
+    check: speculative start is allowed only for classes and profiles that permit it
+
+recognized_dependency_class_profiles:
+  - none
+  - interface
+  - foundation
+  - loose
+  - strict
+
+profile_expectations:
+  none:
+    required_prerequisite_statuses: []
+    speculative_start_allowed: false
+  interface:
+    required_prerequisite_statuses:
+      - merged
+      - completed
+    speculative_start_allowed: false
+  foundation:
+    required_prerequisite_statuses:
+      - merged
+      - completed
+    speculative_start_allowed: false
+  loose:
+    required_prerequisite_statuses:
+      - instantiated
+      - active
+      - merged
+      - completed
+    speculative_start_allowed: true
+  strict:
+    required_prerequisite_statuses:
+      - merged
+      - completed
+    speculative_start_allowed: false

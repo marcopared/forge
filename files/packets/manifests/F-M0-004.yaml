@@ -1,0 +1,79 @@
+packet_id: F-M0-004
+title: "Cross-subsystem contract interfaces"
+version: 1
+
+# Classification
+milestone: M0a
+workstream: WS-1
+packet_class: foundation
+risk_class: high # most coupling-sensitive definitions in the system
+activation_class: operator-launched
+
+# Dependencies
+dependency_class_profile: interface
+prerequisite_packets:
+  - F-M0-003 # Domain types must be merged first
+prerequisite_artifacts:
+  - path: "packages/shared/src/types/domain.ts"
+    description: "Domain types must exist (produced by F-M0-003)"
+  - path: "packages/shared/tsconfig.json"
+    description: "TypeScript config must exist"
+speculative_start_allowed: false
+
+# Scope
+scope:
+  - "packages/shared/src/types/"
+out_of_scope:
+  - "apps/"
+  - "harness/"
+  - "prisma/"
+  - "packages/shared/src/utils/"
+protected_paths:
+  - "harness/"
+  - ".github/"
+  - "AGENTS.md"
+  - ".env"
+target_paths:
+  - "packages/shared/src/types/contracts.ts"
+  - "packages/shared/src/types/index.ts"
+
+# Inputs and Outputs
+required_inputs:
+  - "Approved architecture design — all cross-subsystem interfaces (orchestrator, policy engine, tool broker, agent runner, validator runner, evidence collector)"
+  - "Domain types from F-M0-003"
+expected_outputs:
+  - "TypeScript interfaces for all cross-subsystem contracts"
+  - "Updated re-export index"
+required_docs_updates: []
+
+# Validation / Evidence / Review
+validator_manifest_ref: "packets/validator-manifests/foundation.yaml"
+evidence_manifest_ref: "packets/evidence-manifests/standard.yaml"
+review_manifest_ref: "packets/review-manifests/human-required.yaml"
+prompt_template_ref: "packets/templates/implementer-foundation.yaml"
+context_pack_profile: "foundation-contracts"
+
+# Operational
+benchmark_tags: []
+policy_sensitivities: []
+escalation_conditions:
+  - "Contract interface incompatible with any subsystem spec in the approved architecture design"
+  - "Output size triggers packet sizing concerns per the structural sizing rules"
+  - "Agent introduces implementation beyond type signatures"
+  - "Contract references types not defined in the domain types from F-M0-003"
+completion_contract:
+  - "All exported contract interfaces compile under strict mode"
+  - "Cross-subsystem request/response and result interfaces defined for each subsystem boundary in the architecture"
+  - "Contracts reference only domain types from F-M0-003"
+  - "No implementation logic — only interfaces, type aliases, and type guards"
+  - "Re-export index updated"
+  - "Lint passes"
+graph_repair_hooks:
+  - "If consuming workstream packets fail against these contracts, this packet may need revision"
+  - "Cross-subsystem contract changes carry the highest cascade risk"
+operator_notes: |
+  This is the most coupling-sensitive packet in Wave 1. Cross-subsystem
+  contracts are imported by nearly every workstream. Review against ALL
+  subsystem interface specs in the approved architecture design, not
+  just one. Verify that every cross-subsystem boundary has a
+  corresponding contract interface.

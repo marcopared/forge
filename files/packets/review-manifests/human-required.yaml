@@ -1,0 +1,41 @@
+manifest_kind: review-manifest
+manifest_name: human-required
+version: 1
+status: ready
+review_mode: human
+trigger: deterministic_validation_complete
+summary: >-
+  Mandatory human review mode for Wave 0 and Wave 1 launch readiness. Human
+  review is the blocking gate for foundation packets even when advisory agent
+  review is available.
+
+mandatory_evidence:
+  - diff
+  - validator_results
+  - confidence_score
+  - context_pack_manifest
+  - worktree_identity
+
+advisory_inputs_if_present:
+  - agent_reviewer_findings
+  - repair_history
+  - escalation_notes
+
+required_decision_record:
+  fields:
+    - packet_id
+    - reviewer_identity
+    - decision
+    - rationale
+    - conditions
+  decision_values:
+    - approve
+    - reject
+    - revise
+
+review_focus:
+  - scope compliance
+  - contract fidelity to approved architecture docs
+  - validator pass/fail interpretation
+  - evidence completeness
+  - naming and re-export completeness for foundation contracts

@@ -1,0 +1,76 @@
+packet_id: F-M0-003
+title: "Shared TypeScript interfaces: domain objects"
+version: 1
+
+# Classification
+milestone: M0a
+workstream: WS-1
+packet_class: foundation
+risk_class: medium
+activation_class: operator-launched
+
+# Dependencies
+dependency_class_profile: interface
+prerequisite_packets: []
+prerequisite_artifacts:
+  - path: "packages/shared/tsconfig.json"
+    description: "TypeScript config must exist for compilation"
+  - path: "packages/shared/package.json"
+    description: "Package manifest must exist"
+speculative_start_allowed: false
+
+# Scope
+scope:
+  - "packages/shared/src/types/"
+out_of_scope:
+  - "apps/"
+  - "harness/"
+  - "prisma/"
+  - "packages/shared/src/utils/"
+protected_paths:
+  - "harness/"
+  - ".github/"
+  - "AGENTS.md"
+  - ".env"
+target_paths:
+  - "packages/shared/src/types/domain.ts"
+  - "packages/shared/src/types/index.ts"
+
+# Inputs and Outputs
+required_inputs:
+  - "Approved architecture design — domain model and subsystem breakdown"
+  - "Approved architecture design — task state machine definition"
+expected_outputs:
+  - "TypeScript type definitions for all core domain objects"
+  - "Re-export index file"
+required_docs_updates: [] # M0a does not require doc updates yet
+
+# Validation / Evidence / Review
+validator_manifest_ref: "packets/validator-manifests/foundation.yaml"
+evidence_manifest_ref: "packets/evidence-manifests/standard.yaml"
+review_manifest_ref: "packets/review-manifests/human-required.yaml"
+prompt_template_ref: "packets/templates/implementer-foundation.yaml"
+context_pack_profile: "foundation-contracts"
+
+# Operational
+benchmark_tags: []
+policy_sensitivities: []
+escalation_conditions:
+  - "Type definitions incompatible with the approved architecture design"
+  - "Output size triggers packet sizing concerns per the structural sizing rules"
+  - "Agent attempts to import implementation code"
+  - "Agent attempts to write outside scope"
+completion_contract:
+  - "All exported types compile under strict mode"
+  - "Types cover the domain objects defined in the approved architecture design"
+  - "Re-export index exposes all domain types"
+  - "No implementation logic — only type definitions, interfaces, enums, and type guards"
+  - "Lint passes"
+graph_repair_hooks:
+  - "If downstream packets fail type errors against these definitions, this packet may need revision"
+operator_notes: |
+  This is the first real packet. It defines the core domain types that
+  every subsystem imports. Review carefully against the approved
+  architecture design. Verify completeness: are all domain objects from
+  the architecture represented? Verify correctness: do the type shapes
+  match the architecture spec?

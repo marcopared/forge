@@ -1,0 +1,127 @@
+wave_id: wave-0-live
+title: "Wave 0 Live Synthetic Launch"
+status: ready # ready | active | completed | paused | frozen | aborted
+
+purpose: |
+  Execute the first live Forge wave under operator control using one synthetic,
+  low-risk packet only. Wave 0 live exists to produce authoritative operational
+  evidence for the real control path: launch governance, policy enforcement,
+  validator execution, evidence capture, audit logging, and merge-back.
+
+  It does not authorize product-building work, real M0a contract authoring, or
+  any expansion beyond synthetic-only operational proof.
+
+packets:
+  - WAVE0-SYNTHETIC
+
+excluded_packets:
+  - "All real M0a contract packets"
+  - "All M0b scaffolding packets"
+  - "All M1+ implementation packets"
+  - "All integration packets"
+  - "All policy-sensitive packets"
+  - "All graph-repair packets"
+  - "All schema-changing packets"
+  - "All dependency-adding packets"
+  - "All benchmark runs beyond live smoke verification"
+
+execution_policy:
+  concurrency_cap: 1
+  launch_mode: operator-launched
+  operator_control: human-required
+  speculative_execution: false
+  dependency_class_interpretation: |
+    Wave 0 live uses dependency_class_profile: none.
+    No speculative starts are allowed.
+    Only WAVE0-SYNTHETIC may be activated in this launch window.
+  artifact_control: |
+    Once GO is recorded, launch artifacts are frozen for the run. Any required
+    artifact change triggers wave freeze, readiness recheck, and re-authorization.
+
+review_policy:
+  default_review: human-required
+  agent_review: optional-advisory
+  review_queue_cap: 1
+  posture: no-speculation
+  success_requirement: |
+    Evidence completeness alone is insufficient. The operator must manually
+    inspect the live evidence bundle before declaring success.
+
+benchmark_gates:
+  pre_wave:
+    - live-policy-smoke-pass
+    - live-infra-health-verified
+  post_wave:
+    - wave0-live-smoke-pass
+
+launch_gates:
+  go_requirements:
+    - primary-launch-authority-named
+    - acting-launch-authority-named
+    - artifact-hashes-match-approved-versions
+    - live-infrastructure-health-verified
+    - cli-fallback-operational
+    - live-policy-smoke-pass
+    - escalation-path-rehearsed
+    - metrics-visibility-available
+    - rehearsal-and-live-namespaces-separated
+  continuation_requirements:
+    - packet-state-transitions-legal
+    - no-policy-anomaly
+    - no-security-alert
+    - evidence-path-intact
+    - speculative-marker-false
+    - token-usage-below-hard-ceiling
+
+freeze_gates:
+  policy_engine_anomaly: true
+  security_alert: true
+  evidence_pipeline_anomaly: true
+  unexplained_live_vs_rehearsal_divergence: true
+  operator_loss_of_visibility: true
+  authority_handoff_required: true
+  graph_inconsistency: true
+
+abort_gates:
+  manifest_mismatch_at_runtime: true
+  token_hard_ceiling_reached: true
+  protected_path_or_unsafe_action_attempt: true
+  audit_trail_gap: true
+  unrecoverable_evidence_corruption: true
+  repeated_unsafe_policy_interaction: true
+  worktree_corruption_requiring_fresh_start: true
+
+rollback_gates:
+  synthetic_merge_untrustworthy: true
+  merged_state_requires_revert: true
+  rollback_after_merge_is_operator_authorized_only: true
+
+success_metrics:
+  target_completion_rate: 1.0
+  target_evidence_completeness: 1.0
+  target_policy_anomalies: 0
+  target_security_alerts: 0
+  target_speculative_markers: 0
+  target_operator_interventions: low-and-explainable
+
+progression_constraints:
+  wave1_planning_permitted_only_if: |
+    Packet success, wave success, launch-process success, and platform-trust
+    success are all true and the Wave 0 decision record is closed with an
+    explicit allowance for Wave 1 planning.
+  repeat_or_return_policy: |
+    Any repair loop beyond one narrowly scoped packet-local correction, any
+    unresolved escalation, any rollback, or any governance ambiguity requires
+    either repeat-Wave-0 or return-to-preparation disposition.
+
+operator_notes: |
+  Keep Wave 0 live distinct from wave0-dry-run.yaml. This manifest governs real
+  launch authorization, immutability during execution, live-only monitoring,
+  authority substitution, freeze/abort/rollback handling, and post-run closeout.
+
+  The post-wave gate `wave0-live-smoke-pass` is satisfied only by
+  `benchmarks/manifests/wave0-live-smoke.yaml`, not the rehearsal artifact
+  `benchmarks/manifests/wave0-smoke.yaml`.
+
+  Wave 0 live is synthetic-only operational proof. It is not the start of real
+  product-building work.

@@ -1,0 +1,90 @@
+policy_kind: shell-allowlist
+policy_name: constrained-shell-execution
+version: 1
+status: ready
+summary: >-
+  Documentation-layer allowlist for raw shell fallback. Raw shell is an
+  exceptional, logged, policy-gated path; typed tools remain the primary
+  interface.
+
+policy_defaults:
+  shell_exec_mode: gated
+  task_scope_only: true
+  audit_required: true
+  stdout_stderr_captured: true
+  deny_on_unknown_command: true
+  escalate_on_policy_match: true
+
+role_rules:
+  implementer:
+    permission: gated
+    allowlist:
+      - pnpm lint
+      - pnpm test
+      - pnpm vitest run
+      - pnpm exec tsc --noEmit
+      - pnpm prisma validate
+      - pnpm prisma migrate status
+    notes:
+      - Restricted to validation and stack-standard inspection commands.
+      - Dependency installation or script mutation is not covered here.
+  debugger:
+    permission: gated
+    allowlist:
+      - pnpm lint
+      - pnpm test
+      - pnpm vitest run
+      - pnpm exec tsc --noEmit
+      - pnpm prisma validate
+      - pnpm prisma migrate status
+    notes:
+      - Same constrained shell surface as implementer.
+  validator:
+    permission: gated
+    allowlist:
+      - pnpm lint
+      - pnpm test
+      - pnpm vitest run
+      - pnpm exec tsc --noEmit
+      - pnpm prisma validate
+      - pnpm prisma migrate status
+    notes:
+      - Validator shell usage is limited to test/build commands.
+  planner:
+    permission: none
+  reviewer:
+    permission: none
+  doc_updater:
+    permission: none
+  harness_maintainer:
+    permission: none
+
+always_denied_patterns:
+  - git push
+  - git pull
+  - git merge
+  - rm -rf
+  - chmod
+  - chown
+  - curl
+  - wget
+  - bash -c
+  - sh -c
+  - ssh
+  - scp
+
+always_escalate_conditions:
+  - command_requests_network_access
+  - command_touches_protected_path
+  - command_installs_or_removes_dependencies
+  - command_modifies_package_scripts
+  - command_runs_outside_task_worktree
+  - command_not_in_role_allowlist
+
+operator_notes:
+  - >-
+    The exact command set is operator-tunable. These entries are conservative
+    Wave 0/Wave 1 defaults derived from the blessed stack and security docs.
+  - >-
+    If a needed operation is not listed here, the expected path is escalation or
+    a typed tool, not silent expansion of shell access.

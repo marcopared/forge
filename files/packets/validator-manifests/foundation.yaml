@@ -1,0 +1,107 @@
+manifest_kind: validator-manifest
+manifest_name: foundation
+version: 1
+status: ready
+applies_to_packet_classes:
+  - foundation
+
+execution_mode: fail-forward-within-layer
+summary: >-
+  Shared validator set for foundation packets used by Wave 0 synthetic validation
+  and Wave 1 M0a contract packets. Deterministic validators block promotion;
+  agent review is advisory unless the packet review manifest requires human review.
+
+validator_set:
+  layer_1_correctness:
+    - id: compilation
+      tool: run_typecheck
+      blocking: true
+      order: 1
+      required_for_waves:
+        - wave-0
+        - wave-1
+    - id: lint
+      tool: run_lint
+      blocking: true
+      order: 2
+      required_for_waves:
+        - wave-0
+        - wave-1
+    - id: unit_tests
+      tool: run_tests
+      scope: affected
+      blocking: true
+      order: 3
+      condition: packet_declares_tests_or_fixture_tests_exist
+      required_for_waves:
+        - wave-0
+    - id: architecture_check
+      tool: run_lint
+      scope: full
+      blocking: true
+      order: 4
+      required_for_waves:
+        - wave-0
+        - wave-1
+    - id: file_structure
+      tool: custom_validator
+      blocking: true
+      order: 5
+      required_for_waves:
+        - wave-0
+        - wave-1
+
+  layer_2_security:
+    - id: secret_scan
+      tool: scan_secrets
+      blocking: true
+      order: 6
+      condition: always
+      required_for_waves:
+        - wave-0
+        - wave-1
+    - id: dependency_scan
+      tool: scan_dependencies
+      blocking: true
+      order: 7
+      condition: deps_changed
+
+  layer_3_policy:
+    - id: scope_drift
+      tool: custom_validator
+      blocking: true
+      order: 8
+    - id: protected_paths
+      tool: custom_validator
+      blocking: true
+      order: 9
+    - id: harness_integrity
+      tool: custom_validator
+      blocking: true
+      order: 10
+    - id: policy_compliance
+      tool: audit_trail_scan
+      blocking: true
+      order: 11
+
+  layer_4_evidence:
+    - id: evidence_completeness
+      tool: evidence_check
+      blocking: true
+      order: 12
+    - id: confidence_scoring
+      tool: confidence_compute
+      blocking: false
+      order: 13
+
+  agentic_review:
+    - id: agent_reviewer
+      type: agentic
+      review_manifest_ref: packets/review-manifests/agent-review.yaml
+      blocking: false
+      order: 14
+      condition: review_manifest_allows_agent_review
+
+notes:
+  - If any layer_1 validator fails, later layers may be skipped unless the harness is configured to collect additional diagnostics.
+  - Foundation packets must not rely on speculative execution.

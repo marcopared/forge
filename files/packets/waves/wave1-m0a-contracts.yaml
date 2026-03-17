@@ -1,0 +1,73 @@
+wave_id: wave-1
+title: "M0a Core Contracts"
+status: ready # ready | active | completed | paused
+
+purpose: |
+  Execute the five M0a foundation-contract packets that define the shared
+  type system for the entire Forge codebase. These are pure TypeScript
+  type definitions and interface contracts — no implementation logic.
+  Every subsequent workstream imports from these contracts.
+
+packets:
+  - F-M0-003 # Shared domain object types
+  - F-M0-004 # Cross-subsystem contract interfaces
+  - F-M0-005 # Event taxonomy types
+  - F-M0-006 # Action class taxonomy + tool I/O types
+  - F-M0-007 # Evidence schema + retention tier model
+
+excluded_packets:
+  - "All M0b scaffolding (F-M0-001, F-M0-002, F-M0-008, F-M0-009, F-M0-010)"
+  - "All M1+ packets"
+  - "All integration packets"
+  - "All graph-repair packets"
+
+execution_policy:
+  concurrency_cap: 1 # serial execution
+  launch_mode: operator-launched # every packet requires operator activation
+  speculative_execution: false
+  dependency_class_interpretation: |
+    All five packets use dependency_class_profile: interface.
+    Prereqs must be MERGED before activation.
+    No speculative starts allowed.
+
+review_policy:
+  default_review: human-required # human review is mandatory and blocking
+  agent_review: optional-advisory # may run as pre-screen, never blocking
+
+benchmark_gates:
+  pre_wave:
+    - wave0-live-completion-approved # Wave 0 live closeout must permit Wave 1
+  post_wave: [] # No benchmark run after Wave 1
+
+expansion_criteria:
+  all_packets_merged: true
+  evidence_completeness: 1.0
+  # The following are operator policy thresholds, not design guarantees.
+  # Operator should adjust based on Wave 0 observations.
+  operator_policy:
+    first_pass_success_rate_target: ">= 0.5"
+    recommended_max_graph_repairs: 0 # graph repair is abnormal for Wave 1
+    recommended_max_total_repair_loops: 2
+
+freeze_criteria:
+  pipeline_failure: true # any pipeline error freezes the wave
+  security_alert: true # any security alert freezes the wave
+  policy_anomaly: true # any unexpected ESCALATE freezes the wave
+  evidence_gap: true # any evidence incompleteness freezes the wave
+
+rollback_criteria:
+  cross_task_validation_failure: true
+
+operator_notes: |
+  This is the first real wave. Every output defines contracts that
+  everything else depends on. Review each packet against the approved
+  architecture design, not just compilation correctness.
+
+  Serial execution only. No rushing. Take the time to get these right.
+
+  If any packet requires a graph repair, pause and investigate before
+  continuing. Graph repairs on foundation contracts indicate a design
+  gap that should be resolved at the specification level, not patched
+  at the packet level.
+
+  Token budgets should be reviewed against Wave 0 data before launch.

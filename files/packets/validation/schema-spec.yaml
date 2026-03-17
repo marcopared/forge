@@ -1,0 +1,110 @@
+spec_kind: packet-schema
+spec_name: canonical-packet-manifest
+version: 1
+status: ready
+summary: >-
+  Machine-readable schema specification for packet manifests using the Phase 6
+  canonical field model. Applies to instantiated packet manifests consumed by
+  the orchestrator and validated before activation.
+
+packet_identity_rules:
+  registry_is_authoritative: true
+  duplicate_packet_ids_illegal: true
+  version_increment_required_on_graph_repair: true
+  structurally_different_repairs_require_new_packet_id: true
+
+field_categories:
+  identity:
+    required:
+      packet_id: string
+      title: string
+      version: integer
+  classification:
+    required:
+      milestone: string
+      workstream: string
+      packet_class:
+        type: enum
+        values:
+          - foundation
+          - interface
+          - implementation
+          - integration
+          - validation
+          - documentation
+          - policy-sensitive
+          - graph-repair
+      risk_class:
+        type: enum
+        values:
+          - low
+          - medium
+          - high
+      activation_class:
+        type: enum
+        values:
+          - operator-launched
+          - auto
+          - gated-auto
+  dependencies:
+    required:
+      dependency_class_profile: string
+      prerequisite_packets: list[string]
+      prerequisite_artifacts: list[object]
+      speculative_start_allowed: boolean
+  scope:
+    required:
+      scope: list[string]
+      out_of_scope: list[string]
+      protected_paths: list[string]
+      target_paths: list[string]
+  io:
+    required:
+      required_inputs: list[string]
+      expected_outputs: list[string]
+  validation_evidence_review:
+    required:
+      validator_manifest_ref: string
+      evidence_manifest_ref: string
+      review_manifest_ref: string
+      prompt_template_ref: string
+      context_pack_profile: string
+  operational:
+    required:
+      benchmark_tags: list[string]
+      policy_sensitivities: list[string]
+      escalation_conditions: list[string]
+      completion_contract: list[string]
+      graph_repair_hooks: list[string]
+      operator_notes: string
+
+field_constraints:
+  packet_id_pattern: '^[A-Z0-9-]+$'
+  title_min_length: 3
+  version_minimum: 1
+  prerequisite_artifact_fields:
+    - path
+    - description
+  non_empty_required_strings: true
+  no_tbd_placeholders_in_required_fields: true
+
+class_rules:
+  foundation:
+    speculative_start_allowed: false
+    target_path_mode: exact
+  interface:
+    speculative_start_allowed: false
+    target_path_mode: exact
+  implementation:
+    speculative_start_allowed: allow_by_dependency_profile
+    target_path_mode: exact_or_single_directory_pattern
+  integration:
+    speculative_start_allowed: false
+    target_path_mode: pattern_within_scope
+  documentation:
+    target_path_mode: exact
+  policy-sensitive:
+    speculative_start_allowed: false
+    target_path_mode: exact
+  graph-repair:
+    target_path_mode: inherited_plus_pattern_for_new_files

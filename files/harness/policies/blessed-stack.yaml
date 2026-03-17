@@ -1,0 +1,99 @@
+policy_kind: blessed-stack
+policy_name: forge-mvp-blessed-stack
+version: 1
+status: ready
+summary: >-
+  Canonical documentation-layer description of the single blessed stack for
+  Forge Wave 0 and Wave 1 preparation. This is a human-approved policy config,
+  not a live enforcement artifact.
+
+scope:
+  applies_to_waves:
+    - wave-0
+    - wave-1
+  applies_to_packet_classes:
+    - foundation
+  change_control: human-approved
+
+stack:
+  framework:
+    name: next.js
+    version_family: "14+"
+    profile: app-router
+  language:
+    name: typescript
+    mode: strict
+  database:
+    primary: postgresql
+    orm: prisma
+  styling:
+    primary: tailwind-css
+  testing:
+    unit: vitest
+    e2e: playwright
+    e2e_status: deferred
+  package_manager:
+    name: pnpm
+  deployment_profile:
+    primary: vercel
+    alternate: export-ready
+
+required_harness_surfaces:
+  agents_template: true
+  architecture_template: true
+  eslint_architecture_boundaries: true
+  eslint_import_restrictions: true
+  typescript_strict_config: true
+  vitest_configuration: true
+  coverage_thresholds: true
+  prisma_schema_validation: true
+  prisma_migration_validation: true
+  file_structure_rules: true
+  application_boot_check: true
+
+repository_conventions:
+  expected_structure:
+    - app/
+    - lib/
+    - components/
+    - tests/
+  shared_contract_area:
+    - packages/shared/src/types/
+  packet_artifact_area:
+    - packets/
+    - ops/
+    - benchmarks/
+    - harness/
+  notes:
+    - >-
+      The blessed stack is locked for MVP/Alpha readiness work. Additional
+      stacks are expansion work and out of scope for Wave 0 and Wave 1.
+    - >-
+      Mechanical validation is expected from task one through pre-built harness
+      configuration, not custom linter generation.
+
+validator_expectations:
+  baseline_sequence:
+    - compilation
+    - lint
+    - type-check
+    - unit-tests
+    - architecture-boundary-check
+    - file-structure-check
+    - prisma-schema-validation
+    - application-boot-check
+  security_and_policy_layers:
+    - secret-scan
+    - dependency-scan
+    - scope-drift-check
+    - protected-path-check
+    - harness-integrity-check
+    - policy-compliance-check
+
+operator_notes:
+  - >-
+    This file records the blessed-stack choices and required harness surfaces so
+    packet manifests, validators, and runbooks have a stable reference.
+  - >-
+    The policy is intentionally descriptive. Enforcement belongs to the runtime
+    policy engine and validator stack defined elsewhere.

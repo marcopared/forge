@@ -1,0 +1,102 @@
+manifest_kind: evidence-manifest
+manifest_name: standard
+version: 1
+status: ready
+summary: >-
+  Standard evidence bundle requirements for Wave 0 and Wave 1 packets. This is
+  the default evidence manifest referenced by the synthetic packet and the five
+  M0a foundation packets.
+
+required:
+  - type: diff
+    source: git_diff
+    tier: 1
+  - type: compilation_status
+    source: validator.compilation
+    tier: 1
+  - type: lint_results
+    source: validator.lint
+    tier: 1
+  - type: test_results
+    source: validator.unit_tests
+    tier: 1
+    condition: validator_ran
+  - type: architecture_check
+    source: validator.architecture_check
+    tier: 1
+  - type: scope_drift_check
+    source: validator.scope_drift
+    tier: 1
+  - type: policy_compliance
+    source: validator.policy_compliance
+    tier: 1
+  - type: reviewer_verdict
+    source: review_stage
+    tier: 1
+  - type: confidence_score
+    source: validator.confidence_scoring
+    tier: 1
+  - type: audit_trail
+    source: tool_broker
+    tier: 1
+  - type: cost_summary
+    source: agent_runner
+    tier: 1
+  - type: context_pack_manifest
+    source: context_packager
+    tier: 1
+  - type: worktree_identity
+    source: runtime_manager
+    tier: 1
+
+conditional:
+  - type: secret_scan_results
+    source: validator.secret_scan
+    condition: validator_ran
+    tier: 1
+  - type: dependency_scan_results
+    source: validator.dependency_scan
+    condition: deps_changed
+    tier: 1
+  - type: boot_check_results
+    source: validator.boot_check
+    condition: validator_ran
+    tier: 1
+  - type: repair_history
+    source: orchestrator
+    condition: repair_loop_ran
+    tier: 1
+  - type: speculative_start_marker
+    source: orchestrator
+    condition: speculative_start
+    tier: 1
+  - type: speculative_freeze_outcome
+    source: orchestrator
+    condition: speculative_freeze_occurred
+    tier: 1
+  - type: merge_back_diff
+    source: git_merge_back
+    condition: packet_merged
+    tier: 1
+  - type: post_merge_resolved_state_diff
+    source: git_post_merge_state
+    condition: merge_conflict_resolved
+    tier: 1
+
+ephemeral_unless_pinned:
+  - type: raw_agent_logs
+    source: agent_runner
+    tier: 2
+    pin_on: failure
+  - type: full_test_output
+    source: validator.unit_tests
+    tier: 2
+    pin_on: failure
+  - type: shell_stdout_stderr
+    source: tool_broker
+    tier: 2
+    pin_on: failure
+
+notes:
+  - reviewer_verdict may be produced by a human-required review manifest or by agent review when advisory review is enabled.
+  - Wave 1 human review should cross-check evidence schema outputs against this manifest.

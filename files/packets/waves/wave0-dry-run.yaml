@@ -1,0 +1,74 @@
+wave_id: wave-0
+title: "Wave 0 Synthetic Dry Run"
+status: ready  # ready | active | completed | paused
+
+purpose: |
+  Exercise the Forge execution pipeline end-to-end with one synthetic,
+  low-risk foundation packet before any live product-building work begins.
+  Wave 0 exists to prove the operational spine and produce readiness evidence,
+  not to deliver meaningful product state.
+
+packets:
+  - WAVE0-SYNTHETIC
+
+excluded_packets:
+  - "All real M0a contract packets"
+  - "All M0b scaffolding packets"
+  - "All M1+ implementation packets"
+  - "All integration packets"
+  - "All policy-sensitive packets"
+  - "All graph-repair packets"
+  - "All benchmark runs beyond smoke verification"
+
+execution_policy:
+  concurrency_cap: 1
+  launch_mode: operator-launched
+  speculative_execution: false
+  dependency_class_interpretation: |
+    Wave 0 uses dependency_class_profile: none.
+    No speculative starts are allowed.
+    Only the synthetic packet may be activated during this wave.
+
+review_policy:
+  default_review: human-required
+  agent_review: optional-advisory
+  review_queue_cap: 1
+  posture: no-speculation
+
+benchmark_gates:
+  pre_wave: []
+  post_wave:
+    - wave0-smoke-pass
+
+expansion_criteria:
+  all_packets_merged: true
+  evidence_completeness: 1.0
+  smoke_expectations_met: true
+  operator_policy:
+    expected_policy_decision_pattern: "ALLOW-only"
+    expected_speculative_marker: false
+    recommended_max_repair_loops: 1
+
+freeze_criteria:
+  pipeline_failure: true
+  security_alert: true
+  policy_anomaly: true
+  evidence_gap: true
+  unexpected_scope_write: true
+  any_speculative_artifact: true
+
+rollback_criteria:
+  synthetic_merge_untrustworthy: true
+  cross_task_validation_failure: true
+
+success_metrics:
+  target_completion_rate: 1.0
+  target_evidence_completeness: 1.0
+  target_policy_anomalies: 0
+  target_speculative_markers: 0
+
+operator_notes: |
+  Keep Wave 0 clearly separate from live product-building work.
+  Success means the system behaved correctly under supervision: dispatch,
+  validation, evidence assembly, policy enforcement, and merge-back all worked
+  as designed. It does not mean Forge has proven broad coding capability.

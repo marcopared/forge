@@ -1,0 +1,67 @@
+policy_kind: protected-paths
+policy_name: forge-protected-paths
+version: 1
+status: ready
+summary: >-
+  Canonical protected-path declarations for Wave 0 and Wave 1. Protected paths
+  are readable where role policy allows, but writes require escalation unless a
+  stricter rule denies the action entirely.
+
+protection_model:
+  default_write_behavior: escalate
+  reads_follow_role_policy: true
+  enforcement_reference:
+    - protected-path-check
+    - harness-integrity-check
+    - scope-drift-check
+
+protected_sets:
+  harness_integrity:
+    paths:
+      - harness/
+      - AGENTS.md
+    rationale: >-
+      Harness files define policy, prompt framing, and operator guardrails; they
+      are not mutable during ordinary packet execution.
+  repo_control:
+    paths:
+      - .github/
+      - .github/workflows/
+    rationale: >-
+      Workflow and automation surfaces are escalation-only and require explicit
+      human review.
+  secrets_and_env:
+    paths:
+      - .env
+      - .env*
+    rationale: Secret-bearing files are protected and should not be mutated by agents.
+  database_change_surfaces:
+    paths:
+      - prisma/migrations/
+    rationale: >-
+      Migration history is a protected change surface in the security addendum.
+  dependency_control:
+    paths:
+      - package.json
+    rationale: >-
+      Dependency addition and build-script mutation always escalate. Package
+      manifest changes require human approval.
+
+packet_manifest_defaults:
+  recommended_packet_level_entries:
+    - harness/
+    - .github/
+    - AGENTS.md
+    - .env
+    - .env*
+  notes:
+    - >-
+      Individual packet manifests may declare narrower protected paths in
+      addition to this baseline, but should not weaken these defaults.
+
+operator_notes:
+  - >-
+    This file documents the canonical protected surfaces used by packet
+    manifests, policy review, and protected-path validation.
+  - >-
+    The list is intentionally minimal and source-backed for Wave 0/Wave 1.

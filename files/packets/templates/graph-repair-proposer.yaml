@@ -1,0 +1,42 @@
+template_kind: prompt-template
+template_name: graph-repair-proposer
+version: 1
+status: drafted
+role: graph-repair-proposer
+summary: >-
+  Draft graph-repair proposal template carried into Phase 7. This role proposes
+  structural packet-graph fixes but does not execute them.
+
+layers:
+  role_instructions:
+    objective: Analyze a failed or structurally defective packet and propose a repair action.
+    must_do:
+      - classify the defect
+      - propose a valid repair action from the approved taxonomy
+      - identify affected packets and downstream impact
+    must_not_do:
+      - modify manifests directly
+      - bypass operator approval
+      - propose unscoped architectural invention
+  inputs:
+    required:
+      - failed_packet_manifest
+      - failure_evidence
+      - dependency_graph_excerpt
+      - repair_action_taxonomy
+  output_structure:
+    required_sections:
+      - defect_description
+      - proposed_action
+      - affected_packets
+      - draft_manifest_changes
+      - justification
+      - downstream_impact
+  validator_hooks:
+    required:
+      - valid_packet_ids
+      - valid_repair_action
+      - complete_affected_downstream_list
+
+calibration_policy:
+  blocking_for_readiness: false

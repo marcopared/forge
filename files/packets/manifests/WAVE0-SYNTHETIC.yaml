@@ -1,0 +1,87 @@
+packet_id: WAVE0-SYNTHETIC
+title: "Synthetic hello-world smoke packet"
+version: 1
+
+# Classification
+milestone: M0-synthetic
+workstream: WS-0-synthetic
+packet_class: foundation
+risk_class: low
+activation_class: operator-launched
+
+# Dependencies
+dependency_class_profile: none
+prerequisite_packets: []
+prerequisite_artifacts:
+  - path: "packages/shared/tsconfig.json"
+    description: "TypeScript configuration must exist for type-check and fixture compilation"
+speculative_start_allowed: false
+
+# Scope
+scope:
+  - "packages/shared/src/synthetic/"
+out_of_scope:
+  - "apps/"
+  - "harness/"
+  - "prisma/"
+  - "packages/shared/src/types/"
+  - "packages/shared/src/utils/"
+  - "All non-synthetic product work"
+protected_paths:
+  - "harness/"
+  - ".github/"
+  - "AGENTS.md"
+  - ".env"
+  - ".env*"
+  - "package.json"
+target_paths:
+  - "packages/shared/src/synthetic/hello.ts"
+  - "packages/shared/src/synthetic/hello.test.ts"
+
+# Inputs and Outputs
+required_inputs:
+  - "packages/shared/tsconfig.json"
+  - "Wave 0 synthetic benchmark fixture documentation"
+  - "Approved Wave 0 dry-run and smoke expectations from the preparation docs"
+expected_outputs:
+  - "packages/shared/src/synthetic/hello.ts (exports a greet(name: string): string function)"
+  - "packages/shared/src/synthetic/hello.test.ts (contains one passing test)"
+required_docs_updates: []
+
+# Validation / Evidence / Review
+validator_manifest_ref: "packets/validator-manifests/foundation.yaml"
+evidence_manifest_ref: "packets/evidence-manifests/standard.yaml"
+review_manifest_ref: "packets/review-manifests/human-required.yaml"
+prompt_template_ref: "packets/templates/implementer-foundation.yaml"
+context_pack_profile: "foundation-contracts"
+
+# Operational
+benchmark_tags:
+  - wave0-smoke
+  - synthetic
+policy_sensitivities: []
+escalation_conditions:
+  - "Any attempt to write outside packages/shared/src/synthetic/"
+  - "Any policy decision other than ALLOW during the smoke run"
+  - "Any validator, evidence, or merge-back failure"
+  - "Any request to modify protected or live product-building surfaces"
+completion_contract:
+  - "hello.ts exports a greet(name: string): string function"
+  - "hello.test.ts contains at least one passing test"
+  - "tsc --noEmit passes"
+  - "eslint passes"
+  - "vitest passes"
+  - "Evidence bundle records diff, validator results, audit trail, cost summary, context-pack manifest, and worktree identity"
+  - "Speculative-start marker remains false"
+graph_repair_hooks:
+  - "If this trivial packet needs structural repair, freeze Wave 0 and return to preparation instead of repairing live"
+operator_notes: |
+  This packet is synthetic by design. It exists to prove the operational spine:
+  manifest loading, worktree provisioning, context assembly, agent/tool routing,
+  policy evaluation, validator execution, evidence capture, audit logging, and
+  merge-back.
+
+  It is not a product-capability test and should not be used to make real
+  architectural or product decisions. Keep the output trivial, review-required,
+  serial, and clearly separated from live product-building work in both
+  rehearsal and live use.

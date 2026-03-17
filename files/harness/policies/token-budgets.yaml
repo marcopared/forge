@@ -1,0 +1,69 @@
+policy_kind: token-budgets
+policy_name: wave0-wave1-token-budgets
+version: 1
+status: ready
+summary: >-
+  Conservative token budget defaults for Wave 0 and Wave 1 readiness. Exact
+  values were not locked in the design documents, so these numbers are
+  operator-tunable policy defaults rather than normative limits.
+
+policy_defaults:
+  unit: total_tokens
+  overage_behavior: pause-and-escalate
+  applies_per_packet: true
+  applies_per_phase: true
+  operator_tunable: true
+  calibration_source:
+    - wave-0-smoke-results
+    - wave-1-observation-notes
+
+per_packet_class:
+  foundation:
+    total_tokens: 80000
+    rationale: >-
+      Early foundation packets are small in file scope but high leverage and may
+      require repeated architecture cross-checking.
+  interface:
+    total_tokens: 90000
+    rationale: Contract-heavy packets can require broader cross-subsystem context.
+  implementation:
+    total_tokens: 140000
+    rationale: >-
+      Implementation work typically carries the largest code and validation load.
+  integration:
+    total_tokens: 160000
+    rationale: Integration packets span multiple subsystems and validation layers.
+  validation:
+    total_tokens: 70000
+    rationale: Validator work is targeted but can involve dense policy context.
+  documentation:
+    total_tokens: 50000
+    rationale: Documentation packets should remain comparatively lightweight.
+  policy-sensitive:
+    total_tokens: 100000
+    rationale: >-
+      Security and policy review overhead justifies a higher conservative cap.
+  graph-repair:
+    total_tokens: 120000
+    rationale: >-
+      Repair proposals may need prior diffs, failure evidence, and dependency
+      context in the same packet run.
+
+phase_defaults:
+  wave-0:
+    total_tokens: 120000
+    rationale: Single synthetic packet plus rehearsal overhead.
+  wave-1:
+    total_tokens: 500000
+    rationale: Five serial M0a packets with mandatory review and evidence capture.
+
+calibration_rules:
+  - >-
+    Wave 0 should be used to confirm whether the foundation default is too tight
+    or too loose before Wave 1 executes.
+  - >-
+    Any budget breach pauses execution and routes to operator review instead of
+    silently continuing.
+  - >-
+    Budget increases should be recorded as operator policy adjustments, not
+    hidden prompt changes.

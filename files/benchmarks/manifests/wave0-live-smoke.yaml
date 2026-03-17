@@ -1,0 +1,71 @@
+benchmark_id: wave0-live-smoke
+title: "Wave 0 Live Synthetic Launch Smoke"
+status: ready
+fixture: "benchmarks/fixtures/wave0-synthetic/"
+wave_ref: "packets/waves/wave0-live.yaml"
+packet_ref: "packets/manifests/WAVE0-SYNTHETIC.yaml"
+
+purpose: |
+  Define the live-launch smoke watchlist for the Wave 0 synthetic packet.
+  This benchmark verifies authoritative operational behavior under launch
+  governance, not rehearsal readiness.
+
+scope_exercised:
+  - packet completion under live launch control
+  - validator pass set for the live synthetic packet
+  - evidence bundle completeness in the live namespace
+  - policy behavior with expected ALLOW-only happy-path decisions
+  - merge-back correctness for the approved synthetic diff
+  - audit trail completeness for all live actions and decisions
+  - speculative marker enforcement at false throughout execution
+
+explicitly_not_exercised:
+  - rehearsal readiness or operator training
+  - real M0a contract authoring
+  - broad product-building capability
+  - interface or integration behavior
+  - speculative execution
+  - concurrent packet execution
+  - graph repair in live operation
+  - benchmark suites beyond live smoke verification
+
+expected_outcomes:
+  packet_completion:
+    status: pass
+    expectation: "WAVE0-SYNTHETIC reaches terminal success through the approved live control path"
+  validator_pass_set:
+    status: pass
+    expectation: "All expected blocking validators PASS with no ERROR state"
+  evidence_completeness:
+    status: pass
+    expectation: "All required live evidence fields are present, complete, and attributable to the live namespace"
+  policy_behavior:
+    status: pass
+    expectation: "Observed decisions remain ALLOW-only on the happy path with no unexplained DENY or ESCALATE"
+  merge_back_correctness:
+    status: pass
+    expectation: "Merge-back applies only the approved synthetic diff and remains trustworthy on inspection"
+  audit_trail_completeness:
+    status: pass
+    expectation: "Every live tool action, packet transition, and operator decision is recorded without gaps"
+  speculative_start_marker:
+    status: pass
+    expectation: "false"
+  cost_summary:
+    status: record
+    expectation: "Token count, duration, and model used are recorded"
+  context_pack_manifest:
+    status: record
+    expectation: "Included files, token count, and trust labels are recorded"
+  worktree_identity:
+    status: record
+    expectation: "Branch name and base commit hash are recorded"
+
+failure_interpretation:
+  blocking_conditions:
+    - "Any FAIL outcome in packet completion, validator pass set, evidence completeness, policy behavior, merge-back correctness, audit trail completeness, or speculative marker enforcement"
+    - "Any missing cost, context-pack, or worktree metadata required for live closeout"
+    - "Any live evidence that cannot be cleanly distinguished from rehearsal evidence"
+  operator_policy:
+    - "Treat any live smoke failure as a freeze-and-investigate event, not a rehearsal-style retry"
+    - "Do not progress to Wave 1 planning until the live smoke watchlist passes and the decision record is closed"

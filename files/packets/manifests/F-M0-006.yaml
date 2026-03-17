@@ -1,0 +1,82 @@
+packet_id: F-M0-006
+title: "Action class taxonomy + tool I/O types"
+version: 1
+
+# Classification
+milestone: M0a
+workstream: WS-1
+packet_class: foundation
+risk_class: high # policy engine and tool broker both depend on these
+activation_class: operator-launched
+
+# Dependencies
+dependency_class_profile: interface
+prerequisite_packets:
+  - F-M0-003 # Domain types must be merged
+prerequisite_artifacts:
+  - path: "packages/shared/src/types/domain.ts"
+    description: "Domain types must exist"
+  - path: "packages/shared/tsconfig.json"
+    description: "TypeScript config must exist"
+speculative_start_allowed: false
+
+# Scope
+scope:
+  - "packages/shared/src/types/"
+out_of_scope:
+  - "apps/"
+  - "harness/"
+  - "prisma/"
+  - "packages/shared/src/utils/"
+protected_paths:
+  - "harness/"
+  - ".github/"
+  - "AGENTS.md"
+  - ".env"
+target_paths:
+  - "packages/shared/src/types/actions.ts"
+  - "packages/shared/src/types/index.ts"
+
+# Inputs and Outputs
+required_inputs:
+  - "Approved architecture design — policy engine action class evaluation"
+  - "Approved architecture design — tool broker typed ACI and six action classes"
+  - "Approved security design — action class taxonomy (READ, MUTATE, EXECUTE, ANALYZE, NETWORK, ATTEST)"
+  - "Domain types from F-M0-003"
+expected_outputs:
+  - "TypeScript action class type definitions and per-class tool I/O types"
+  - "Updated re-export index"
+required_docs_updates: []
+
+# Validation / Evidence / Review
+validator_manifest_ref: "packets/validator-manifests/foundation.yaml"
+evidence_manifest_ref: "packets/evidence-manifests/standard.yaml"
+review_manifest_ref: "packets/review-manifests/human-required.yaml"
+prompt_template_ref: "packets/templates/implementer-foundation.yaml"
+context_pack_profile: "foundation-contracts"
+
+# Operational
+benchmark_tags: []
+policy_sensitivities: []
+escalation_conditions:
+  - "Action class types incompatible with the approved architecture and security design"
+  - "Output size triggers packet sizing concerns per the structural sizing rules"
+  - "Agent invents action classes not in the approved six-class taxonomy"
+  - "Tool I/O types are not structured enough for policy engine evaluation"
+completion_contract:
+  - "All action class types compile under strict mode"
+  - "The six approved action classes are defined: READ, MUTATE, EXECUTE, ANALYZE, NETWORK, ATTEST"
+  - "Per-class tool I/O types defined (input parameters and result shapes)"
+  - "Types reference domain types from F-M0-003"
+  - "No implementation logic"
+  - "Re-export index updated"
+  - "Lint passes"
+graph_repair_hooks:
+  - "If policy engine or tool broker packets fail against these types, this packet may need revision"
+operator_notes: |
+  These types define what the policy engine evaluates and what the tool
+  broker routes. The six action classes (READ, MUTATE, EXECUTE, ANALYZE,
+  NETWORK, ATTEST) must match the approved security design exactly.
+  Per-tool I/O types should be specific enough that the policy engine
+  can make meaningful ALLOW/DENY/ESCALATE decisions based on the type
+  alone. Review against the approved security design and architecture.

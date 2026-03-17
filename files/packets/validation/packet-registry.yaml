@@ -1,0 +1,80 @@
+spec_kind: packet-registry
+spec_name: instantiated-packets
+version: 2
+status: ready
+summary: >-
+  Authoritative registry of instantiated packet identity for Wave 0 and Wave 1.
+  If a packet id is absent from this registry, it does not exist to the
+  orchestrator.
+
+identity_rules:
+  registry_is_authoritative: true
+  duplicate_packet_ids_illegal: true
+  graph_repair_reuses_packet_id_with_version_increment: true
+  structurally_distinct_repair_requires_new_packet_id: true
+  reconciliation_source: registry_not_filesystem_scan
+
+membership_model:
+  single_wave_field: wave_id
+  multi_wave_field: wave_memberships
+  rules:
+    - Each instantiated packet must declare wave membership in the registry.
+    - Use wave_id when the packet belongs to one wave only.
+    - Use wave_memberships when one packet is intentionally reused across multiple declared wave contexts.
+    - Multiple wave memberships do not create a second packet identity.
+
+status_model:
+  allowed_statuses:
+    - abstract
+    - instantiated
+    - ready
+    - active
+    - merged
+    - completed
+    - paused
+
+packets:
+  - packet_id: WAVE0-SYNTHETIC
+    manifest_ref: packets/manifests/WAVE0-SYNTHETIC.yaml
+    wave_memberships:
+      - wave-0
+      - wave-0-live
+    milestone: M0-synthetic
+    packet_class: foundation
+    status: instantiated
+    notes: Synthetic smoke packet prepared in Phase 7 for both rehearsal and live Wave 0 contexts; not yet assumed active or completed in either context.
+  - packet_id: F-M0-003
+    manifest_ref: packets/manifests/F-M0-003.yaml
+    wave_id: wave-1
+    milestone: M0a
+    packet_class: foundation
+    status: instantiated
+    notes: First real Wave 1 packet prepared but not assumed merged.
+  - packet_id: F-M0-004
+    manifest_ref: packets/manifests/F-M0-004.yaml
+    wave_id: wave-1
+    milestone: M0a
+    packet_class: foundation
+    status: instantiated
+    notes: Depends on F-M0-003 being merged before activation.
+  - packet_id: F-M0-005
+    manifest_ref: packets/manifests/F-M0-005.yaml
+    wave_id: wave-1
+    milestone: M0a
+    packet_class: foundation
+    status: instantiated
+    notes: Depends on F-M0-003 being merged before activation.
+  - packet_id: F-M0-006
+    manifest_ref: packets/manifests/F-M0-006.yaml
+    wave_id: wave-1
+    milestone: M0a
+    packet_class: foundation
+    status: instantiated
+    notes: Depends on F-M0-003 being merged before activation.
+  - packet_id: F-M0-007
+    manifest_ref: packets/manifests/F-M0-007.yaml
+    wave_id: wave-1
+    milestone: M0a
+    packet_class: foundation
+    status: instantiated
+    notes: Depends on F-M0-003 being merged before activation.

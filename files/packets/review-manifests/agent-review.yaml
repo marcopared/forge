@@ -1,0 +1,40 @@
+manifest_kind: review-manifest
+manifest_name: agent-review
+version: 1
+status: ready
+review_mode: agent
+reviewer_role: reviewer
+trigger: all_deterministic_validators_pass
+summary: >-
+  Advisory agent review after deterministic validation. Suitable as a pre-screen
+  for Wave 1 but not a replacement for human review on foundation packets.
+
+checklist:
+  - category: scope_compliance
+    question: Did the change stay inside declared scope and target paths?
+  - category: convention_adherence
+    question: Does the output follow naming, import, and structure conventions?
+  - category: architecture_respect
+    question: Do imports and boundaries respect the approved architecture?
+  - category: test_adequacy
+    question: Do tests exercise the specification rather than tautologies?
+  - category: completion_criteria
+    question: Are all manifest completion contract items satisfied?
+
+escalation_triggers:
+  - reviewer finds a scope violation validators missed
+  - reviewer identifies tautological tests
+  - reviewer and implementer disagree after 2 review-repair cycles
+
+output_format:
+  findings: list
+  verdict:
+    type: enum
+    values:
+      - approve
+      - request_changes
+  summary: text
+  required_finding_fields:
+    - severity
+    - location
+    - description

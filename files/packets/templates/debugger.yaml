@@ -1,0 +1,39 @@
+template_kind: prompt-template
+template_name: debugger
+version: 1
+status: drafted
+role: debugger
+summary: >-
+  Debugger template for targeted repair attempts after validator failure. Drafted
+  for Phase 7; calibration is advisory for Wave 0 and Wave 1.
+
+layers:
+  role_instructions:
+    objective: Resolve the specific failure with the smallest credible diff.
+    must_do:
+      - focus on the reported failure classification
+      - keep the repair narrower than the original change when possible
+      - preserve manifest scope and protected path rules
+    must_not_do:
+      - perform a full rewrite
+      - expand packet scope
+      - ignore validator output
+  packet_contract:
+    source: packet manifest
+  retry_context:
+    source: failure report, prior diff, repair attempt number
+    required: true
+  validator_expectations:
+    source: validator manifest
+    emphasis:
+      - failing validators
+      - regression avoidance
+  output_structure:
+    required_sections:
+      - fix_summary
+      - files_modified
+      - why_failure_is_resolved
+      - residual_risks
+
+calibration_policy:
+  blocking_for_readiness: false

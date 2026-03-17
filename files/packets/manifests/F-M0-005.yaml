@@ -1,0 +1,79 @@
+packet_id: F-M0-005
+title: "Event taxonomy types"
+version: 1
+
+# Classification
+milestone: M0a
+workstream: WS-1
+packet_class: foundation
+risk_class: medium
+activation_class: operator-launched
+
+# Dependencies
+dependency_class_profile: interface
+prerequisite_packets:
+  - F-M0-003 # Domain types must be merged (events reference domain objects)
+prerequisite_artifacts:
+  - path: "packages/shared/src/types/domain.ts"
+    description: "Domain types must exist"
+  - path: "packages/shared/tsconfig.json"
+    description: "TypeScript config must exist"
+speculative_start_allowed: false
+
+# Scope
+scope:
+  - "packages/shared/src/types/"
+out_of_scope:
+  - "apps/"
+  - "harness/"
+  - "prisma/"
+  - "packages/shared/src/utils/"
+protected_paths:
+  - "harness/"
+  - ".github/"
+  - "AGENTS.md"
+  - ".env"
+target_paths:
+  - "packages/shared/src/types/events.ts"
+  - "packages/shared/src/types/index.ts"
+
+# Inputs and Outputs
+required_inputs:
+  - "Approved architecture design — orchestrator event model"
+  - "Approved architecture design — audit/observability event ingestion"
+  - "Approved architecture design — real-time event streaming model"
+  - "Domain types from F-M0-003"
+expected_outputs:
+  - "TypeScript event type definitions covering all system event categories"
+  - "Updated re-export index"
+required_docs_updates: []
+
+# Validation / Evidence / Review
+validator_manifest_ref: "packets/validator-manifests/foundation.yaml"
+evidence_manifest_ref: "packets/evidence-manifests/standard.yaml"
+review_manifest_ref: "packets/review-manifests/human-required.yaml"
+prompt_template_ref: "packets/templates/implementer-foundation.yaml"
+context_pack_profile: "foundation-contracts"
+
+# Operational
+benchmark_tags: []
+policy_sensitivities: []
+escalation_conditions:
+  - "Event types incompatible with the approved architecture event model"
+  - "Output size triggers packet sizing concerns per the structural sizing rules"
+  - "Agent defines events that don't correspond to architecture-defined state transitions or subsystem interactions"
+completion_contract:
+  - "All event types compile under strict mode"
+  - "Event types cover the event categories defined in the approved architecture (state transitions, policy decisions, tool invocations, validation results, audit events)"
+  - "Events reference domain types from F-M0-003"
+  - "No implementation logic — only event type definitions and discriminated unions"
+  - "Re-export index updated"
+  - "Lint passes"
+graph_repair_hooks:
+  - "If orchestrator, audit, or control plane packets fail on event type mismatches, this packet may need revision"
+operator_notes: |
+  Event taxonomy defines the shape of all events flowing through the
+  event bus and consumed by the orchestrator, audit pipeline, and UI.
+  Verify completeness against the approved architecture: are all event
+  categories represented? Verify that event types form clean
+  discriminated unions.

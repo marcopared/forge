@@ -1,0 +1,96 @@
+manifest_kind: validator-manifest
+manifest_name: implementation
+version: 1
+status: ready
+applies_to_packet_classes:
+  - implementation
+
+execution_mode: fail-forward-within-layer
+summary: >-
+  Standard validator set for implementation-oriented packets after the Wave 0 and
+  Wave 1 foundation-contract phase. Deterministic validators block promotion;
+  agent review is advisory unless the packet review manifest requires stronger
+  review posture.
+
+validator_set:
+  layer_1_correctness:
+    - id: compilation
+      tool: run_typecheck
+      blocking: true
+      order: 1
+    - id: lint
+      tool: run_lint
+      blocking: true
+      order: 2
+    - id: unit_tests
+      tool: run_tests
+      scope: affected
+      blocking: true
+      order: 3
+    - id: architecture_check
+      tool: run_lint
+      scope: full
+      blocking: true
+      order: 4
+    - id: file_structure
+      tool: custom_validator
+      blocking: true
+      order: 5
+    - id: boot_check
+      tool: boot_app
+      blocking: true
+      condition: code_changed
+      order: 6
+
+  layer_2_security:
+    - id: secret_scan
+      tool: scan_secrets
+      blocking: true
+      order: 7
+      condition: always
+    - id: dependency_scan
+      tool: scan_dependencies
+      blocking: true
+      order: 8
+      condition: deps_changed
+
+  layer_3_policy:
+    - id: scope_drift
+      tool: custom_validator
+      blocking: true
+      order: 9
+    - id: protected_paths
+      tool: custom_validator
+      blocking: true
+      order: 10
+    - id: harness_integrity
+      tool: custom_validator
+      blocking: true
+      order: 11
+    - id: policy_compliance
+      tool: audit_trail_scan
+      blocking: true
+      order: 12
+
+  layer_4_evidence:
+    - id: evidence_completeness
+      tool: evidence_check
+      blocking: true
+      order: 13
+    - id: confidence_scoring
+      tool: confidence_compute
+      blocking: false
+      order: 14
+
+  agentic_review:
+    - id: agent_reviewer
+      type: agentic
+      review_manifest_ref: packets/review-manifests/agent-review.yaml
+      blocking: false
+      order: 15
+      condition: review_manifest_allows_agent_review
+
+notes:
+  - This manifest is for later implementation-oriented packets and does not expand Wave 0 or Wave 1 scope.
+  - If any layer_1 validator fails, later layers may be skipped unless the harness is configured to collect additional diagnostics.
+  - Boot checks should remain scoped to implementation packets where application startup behavior is meaningful.

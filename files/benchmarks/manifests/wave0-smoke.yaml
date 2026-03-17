@@ -1,0 +1,85 @@
+benchmark_id: wave0-smoke
+title: "Wave 0 Synthetic Pipeline Smoke"
+status: ready
+fixture: "benchmarks/fixtures/wave0-synthetic/"
+wave_ref: "packets/waves/wave0-dry-run.yaml"
+packet_ref: "packets/manifests/WAVE0-SYNTHETIC.yaml"
+
+purpose: |
+  Define the minimal smoke expectations for the Wave 0 synthetic run.
+  This benchmark verifies the execution pipeline and evidence path, not
+  meaningful product capability.
+
+scope_exercised:
+  - manifest loading and parsing
+  - worktree provisioning
+  - context-pack assembly
+  - agent invocation and allowed tool routing
+  - policy evaluation with expected ALLOW decisions
+  - validator execution
+  - evidence bundle assembly
+  - audit trail capture
+  - merge-back of the synthetic diff
+
+explicitly_not_exercised:
+  - real M0a contract authoring
+  - broad product-building capability
+  - interface or integration behavior
+  - speculative execution
+  - concurrent packet execution
+  - graph repair in live operation
+  - benchmark suites beyond smoke verification
+
+expected_outcomes:
+  diff:
+    status: pass
+    expectation: "Exactly one synthetic module and one synthetic test are added within packages/shared/src/synthetic/"
+  compilation:
+    status: pass
+    command: "tsc --noEmit"
+  lint:
+    status: pass
+    command: "eslint"
+  tests:
+    status: pass
+    command: "vitest"
+    minimum_passing_tests: 1
+  architecture_check:
+    status: pass
+    expectation: "No subsystem boundary violations"
+  scope_drift:
+    status: pass
+    expectation: "No writes outside declared Wave 0 target paths"
+  policy_compliance:
+    status: pass
+    expectation: "All tool invocations recorded as ALLOW"
+  evidence_completeness:
+    status: pass
+    expectation: "All required evidence fields are present"
+  confidence_score:
+    status: pass
+    expectation: "> 0.9 for this trivial packet"
+  audit_trail:
+    status: pass
+    expectation: "Complete action log with target and result for every tool invocation"
+  cost_summary:
+    status: record
+    expectation: "Token count, duration, and model used are recorded"
+  context_pack_manifest:
+    status: record
+    expectation: "Included files, token count, and trust labels are recorded"
+  worktree_identity:
+    status: record
+    expectation: "Branch name and base commit hash are recorded"
+  speculative_start_marker:
+    status: pass
+    expectation: "false"
+
+failure_interpretation:
+  blocking_conditions:
+    - "Any FAIL outcome in compilation, lint, tests, architecture, scope, policy, or evidence completeness"
+    - "Any missing audit, cost, context-pack, or worktree metadata"
+    - "Any speculative marker other than false"
+  operator_policy:
+    - "Treat smoke failure as a readiness blocker for launch or progression"
+    - "If structural repair is needed on this synthetic packet, return to preparation rather than widening live scope"
