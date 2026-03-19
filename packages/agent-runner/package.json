@@ -1,0 +1,16 @@
+{
+  "name": "@forge/agent-runner",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": "./src/index.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@forge/config": "workspace:*",
+    "@forge/evidence": "workspace:*",
+    "@forge/shared": "workspace:*",
+    "@forge/tool-broker": "workspace:*"
+  }
+}

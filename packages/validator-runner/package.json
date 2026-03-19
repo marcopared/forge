@@ -1,0 +1,16 @@
+{
+  "name": "@forge/validator-runner",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": "./src/index.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@forge/db": "workspace:*",
+    "@forge/evidence": "workspace:*",
+    "@forge/runtime-manager": "workspace:*",
+    "@forge/shared": "workspace:*"
+  }
+}

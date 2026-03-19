@@ -1,0 +1,39 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${FORGE_POSTGRES_DB:-forge}
+      POSTGRES_USER: ${FORGE_POSTGRES_USER:-forge}
+      POSTGRES_PASSWORD: ${FORGE_POSTGRES_PASSWORD:-forge}
+    ports:
+      - "${FORGE_POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - forge-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${FORGE_POSTGRES_USER:-forge} -d ${FORGE_POSTGRES_DB:-forge}"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "${FORGE_REDIS_PORT:-6379}:6379"
+    volumes:
+      - forge-redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  forge-postgres-data:
+  forge-redis-data:
