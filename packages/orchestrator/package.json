@@ -1,0 +1,23 @@
+{
+  "name": "@forge/orchestrator",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": "./src/index.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@forge/agent-runner": "workspace:*",
+    "@forge/config": "workspace:*",
+    "@forge/db": "workspace:*",
+    "@forge/evidence": "workspace:*",
+    "@forge/policy-engine": "workspace:*",
+    "@forge/runtime-manager": "workspace:*",
+    "@forge/shared": "workspace:*",
+    "@forge/storage": "workspace:*",
+    "@forge/tool-broker": "workspace:*",
+    "@forge/validator-runner": "workspace:*",
+    "yaml": "^2.6.1"
+  }
+}

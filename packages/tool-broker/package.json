@@ -1,0 +1,16 @@
+{
+  "name": "@forge/tool-broker",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": "./src/index.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@forge/evidence": "workspace:*",
+    "@forge/policy-engine": "workspace:*",
+    "@forge/runtime-manager": "workspace:*",
+    "@forge/shared": "workspace:*"
+  }
+}

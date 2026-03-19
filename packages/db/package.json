@@ -1,0 +1,19 @@
+{
+  "name": "@forge/db",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": "./src/index.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "migrate": "node --import tsx src/cli.ts migrate"
+  },
+  "dependencies": {
+    "@forge/config": "workspace:*",
+    "@forge/shared": "workspace:*",
+    "pg": "^8.14.1"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.11.11"
+  }
+}

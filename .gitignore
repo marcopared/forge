@@ -1,0 +1,15 @@
+*_codebase.md
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Local runtime artifacts
+.env
+node_modules/
+dist/
+var/
+.pnpm-store/

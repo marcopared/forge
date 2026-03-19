@@ -1,0 +1,47 @@
+{
+  "name": "forge",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "pnpm -r build",
+    "db:migrate": "node --import tsx packages/db/src/cli.ts migrate",
+    "test": "node --import tsx --test packages/config/test/config.test.ts packages/storage/test/storage.test.ts packages/evidence/test/evidence.test.ts packages/orchestrator/test/manifest-loader.test.ts packages/orchestrator/test/wave0-orchestrator.test.ts packages/runtime-manager/test/runtime-manager.test.ts packages/policy-engine/test/policy-engine.test.ts packages/tool-broker/test/tool-broker.test.ts packages/validator-runner/test/validator-runner.test.ts apps/cli/test/wave0.test.ts",
+    "test:db": "node --import tsx --test packages/db/test/persistence.test.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "stack:up": "docker compose up -d postgres redis",
+    "stack:down": "docker compose down",
+    "stack:logs": "docker compose logs -f postgres redis",
+    "bootstrap:local": "node --import tsx apps/cli/src/index.ts bootstrap",
+    "inspect:local": "node --import tsx apps/cli/src/index.ts doctor",
+    "config:print": "node --import tsx apps/cli/src/index.ts print-config",
+    "runtime:provision": "node --import tsx apps/cli/src/index.ts runtime:provision",
+    "runtime:diff": "node --import tsx apps/cli/src/index.ts runtime:diff",
+    "runtime:merge": "node --import tsx apps/cli/src/index.ts runtime:merge",
+    "runtime:rollback": "node --import tsx apps/cli/src/index.ts runtime:rollback",
+    "runtime:teardown": "node --import tsx apps/cli/src/index.ts runtime:teardown",
+    "validate:wave0": "node --import tsx apps/cli/src/index.ts validate:wave0",
+    "wave0:launch": "node --import tsx apps/cli/src/index.ts wave0:launch",
+    "wave0:run": "node --import tsx apps/cli/src/index.ts wave0:run",
+    "wave0:smoke": "node --import tsx apps/cli/src/index.ts wave0:smoke",
+    "wave0:status": "node --import tsx apps/cli/src/index.ts wave0:status",
+    "wave0:packet-status": "node --import tsx apps/cli/src/index.ts wave0:packet-status",
+    "wave0:validators": "node --import tsx apps/cli/src/index.ts wave0:validators",
+    "wave0:evidence": "node --import tsx apps/cli/src/index.ts wave0:evidence",
+    "wave0:policy-log": "node --import tsx apps/cli/src/index.ts wave0:policy-log",
+    "wave0:audit": "node --import tsx apps/cli/src/index.ts wave0:audit",
+    "wave0:pause": "node --import tsx apps/cli/src/index.ts wave0:pause",
+    "wave0:abort": "node --import tsx apps/cli/src/index.ts wave0:abort",
+    "wave0:resume": "node --import tsx apps/cli/src/index.ts wave0:resume",
+    "wave0:rollback": "node --import tsx apps/cli/src/index.ts wave0:rollback",
+    "wave0:closeout": "node --import tsx apps/cli/src/index.ts wave0:closeout",
+    "wave0:inspect": "node --import tsx apps/cli/src/index.ts wave0:inspect"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
